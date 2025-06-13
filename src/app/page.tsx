@@ -2,27 +2,30 @@ import AddTaskForm from "@/components/AddTaskForm";
 import { createServerSupabaseClient } from "@/auth/client";
 
 export default async function Home() {
-  // Use the custom Supabase client you created
   const client = createServerSupabaseClient();
 
-  // Query the 'tasks' table to render the list of tasks
-  const { data, error } = await client.from("tasks").select();
+  const { data, error } = await client.from("bots").select();
   if (error) {
     throw error;
   }
 
-  const tasks = data as [{ id: number; name: string; user_id: string }];
-  console.log(tasks);
+  const bots = data as [
+    { id: number; name: string; description: string; user_id: string }
+  ];
+  console.log(bots);
 
   return (
     <div>
-      <h1>Tasks</h1>
+      <h1>Your bots</h1>
 
-      <div>
-        {tasks?.map((task) => (
-          <p key={task.id}>{task.name}</p>
+      <ul>
+        {bots?.map((task) => (
+          <li key={task.id}>
+            <p>{task.name}</p>
+            {/* <p>{task.description}</p> */}
+          </li>
         ))}
-      </div>
+      </ul>
 
       <AddTaskForm />
     </div>

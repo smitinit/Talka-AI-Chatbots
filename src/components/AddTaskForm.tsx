@@ -1,14 +1,16 @@
 "use client";
+
 import React, { useState } from "react";
-import { addTask } from "@/lib/actions";
+import { addBot } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 
 function AddTaskForm() {
   const [taskName, setTaskName] = useState("");
+  const [description, setDescription] = useState("");
   const router = useRouter();
 
   async function onSubmit() {
-    await addTask(taskName);
+    await addBot(taskName, description);
     setTaskName("");
     router.refresh();
   }
@@ -19,11 +21,21 @@ function AddTaskForm() {
         autoFocus
         type="text"
         name="name"
-        placeholder="Enter new task"
+        placeholder="Enter new name"
         onChange={(e) => setTaskName(e.target.value)}
         value={taskName}
+        autoComplete="off"
       />
-      <button type="submit">Add</button>
+      <input
+        autoFocus
+        type="text"
+        name="description"
+        placeholder="Enter description"
+        onChange={(e) => setDescription(e.target.value)}
+        value={description}
+        autoComplete="off"
+      />
+      <button type="submit">Create</button>
     </form>
   );
 }
