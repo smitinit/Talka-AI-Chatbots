@@ -1,8 +1,8 @@
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-black" />
-      <span className="ml-4 text-gray-700 text-sm font-medium">Loading...</span>
+    <div className="flex items-center justify-center min-h-[60vh] text-muted-foreground">
+      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
+      <span className="ml-3 text-sm font-medium">Loading...</span>
     </div>
   );
 }
