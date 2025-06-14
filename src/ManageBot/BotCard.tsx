@@ -40,17 +40,14 @@ export default function BotCard({ bot }: { bot: BotType }) {
 
   return (
     <>
-      <Card
-        className="group cursor-pointer transition-shadow hover:shadow-lg"
-        key={bot.id}
-      >
+      <Card className="group" key={bot.id}>
         <CardHeader className="">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3 min-w-0 flex-1">
               <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg shrink-0">
                 <Bot className="text-primary h-5 w-5" />
               </div>
-              <CardTitle className="text-lg sm:text-xl truncate">
+              <CardTitle className="text-lg sm:text-xl truncate max-w-[150px]">
                 {bot.name}
               </CardTitle>
             </div>
@@ -59,7 +56,7 @@ export default function BotCard({ bot }: { bot: BotType }) {
         </CardHeader>
         <CardContent>
           <CardDescription className="text-sm sm:text-base lg:text-lg flex flex-col gap-3 sm:gap-4">
-            <span className="line-clamp-3">{bot.description}</span>
+            <span className="line-clamp-1">{bot.description}</span>
             <div className="space-y-1">
               <p className="text-muted-foreground text-xs">
                 Created at: {formattedCreateTime}

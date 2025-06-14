@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useState } from "react";
+import { startTransition, useActionState } from "react";
 import { useForm } from "react-hook-form";
 
 import { addBot } from "@/ManageBot/bot.actions";
@@ -12,24 +12,16 @@ import {
 import type { Result } from "@/types/result";
 import type { Bot } from "@/ManageBot/bot.types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
-import { Plus } from "lucide-react";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangleIcon } from "lucide-react";
 
 export default function BotForm() {
-  const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -39,6 +31,7 @@ export default function BotForm() {
     defaultValues: { name: "", description: "" },
     resolver: zodResolver(botSchema),
     mode: "onChange",
+    shouldFocusError: false,
   });
 
   const [state, dispatch, isPending] = useActionState<Result<Bot>, BotFormType>(
@@ -47,7 +40,7 @@ export default function BotForm() {
 
       if (result.ok) {
         reset();
-        setOpen(false);
+        router.back();
       }
 
       return result;
@@ -61,66 +54,76 @@ export default function BotForm() {
 
   const isLoading = isSubmitting || isPending;
   return (
-    <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Card className="border-muted-foreground/25 hover:border-muted-foreground/50 group cursor-pointer border-2 border-dashed ">
-            <CardContent className="flex flex-1 flex-col items-center justify-center h-48 text-center">
-              <div className="bg-primary/10 group-hover:bg-primary/20 mb-4 flex h-12 w-12 items-center justify-center rounded-full transition-colors">
-                <Plus className="text-primary h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-lg font-semibold">Create New Bot</h3>
-              <p className="text-muted-foreground text-sm">
-                Click to add a new AI bot
-              </p>
-            </CardContent>
-          </Card>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
-          <form onSubmit={onSubmit}>
-            <DialogHeader>
-              <DialogTitle>Create New Bot</DialogTitle>
-              <DialogDescription>
-                Enter a name for your new AI bot.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
+    <div className="flex items-start justify-center p-4 ">
+      <Card className="w-full max-w-md border-none shadow-none">
+        <CardHeader className="text-center pb-6">
+          <CardTitle className="text-2xl font-semibold">
+            Create New Bot
+          </CardTitle>
+          <p className="text-muted-foreground">
+            Enter a name for your new AI bot.
+          </p>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={onSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
                 <Label htmlFor="name">Bot Name</Label>
                 <Input
                   {...register("name")}
+                  id="name"
                   placeholder="Enter bot name"
-                  className="border px-3 py-2 rounded"
+                  className="h-10"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  <p className="text-destructive dark:text-yellow-200 text-sm">
+                    {errors.name.message}
+                  </p>
                 )}
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="bot-name">Bot Description</Label>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Bot Description</Label>
                 <Input
                   {...register("description")}
                   placeholder="Enter bot description"
-                  className="border px-3 py-2 rounded"
+                  id="description"
+                  className="h-10"
                 />
                 {errors.description && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-destructive dark:text-yellow-200 text-sm">
                     {errors.description.message}
                   </p>
                 )}
               </div>
             </div>
-            {!state.ok && (
-              <p className="text-red-500 mt-2 text-sm">{state.message}</p>
+
+            {!state.ok && state.message && (
+              <p className="dark:text-yellow-200 text-destructive flex justify-center items-center gap-2  text-sm text-center bg-destructive/10 p-3 rounded-md">
+                <AlertTriangleIcon className="h-4 w-4" />
+                {state.message}
+              </p>
             )}
-            <DialogFooter>
-              <Button type="submit" disabled={isLoading}>
+
+            <div className="flex flex-col gap-3 pt-2">
+              <Button type="submit" disabled={isLoading} className="w-full">
                 {isLoading ? "Creating..." : "Create Bot"}
               </Button>
-            </DialogFooter>
+
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isLoading}
+                onClick={() => router.back()}
+                className="w-full"
+              >
+                Back
+              </Button>
+            </div>
           </form>
-        </DialogContent>
-      </Dialog>
-    </>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
-import Script from "next/script";
+import { Footer } from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script
+        {/* <Script
           src="//unpkg.com/react-scan/dist/auto.global.js"
           crossOrigin="anonymous"
-        />
+        /> */}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
@@ -41,9 +41,10 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navbar />
             {children}
-            {/* <Footer /> */}
+            <Footer />
           </ThemeProvider>
         </ClerkProvider>
+        <div id="modal-root"></div>
       </body>
     </html>
   );
