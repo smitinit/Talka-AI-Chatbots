@@ -6,15 +6,17 @@ export default async function ManageBots() {
   const bots = await getBots();
 
   return (
-    <main className="p-4">
-      <div className="py-6">
-        <h1 className="text-2xl">Add bot</h1>
-        <BotForm />
+    <div className="container mx-auto max-w-6xl p-6">
+      <div className="mb-8">
+        <h1 className="mb-2 text-3xl font-bold">Bot Management</h1>
+        <p className="text-muted-foreground">Create and manage your AI bots</p>
       </div>
-      <ul className="grid gap-5 pt-6 grid-cols-3 border-t">
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <BotForm />
         {bots.ok ? (
           bots.data.length > 0 ? (
-            bots.data.map((bot) => <BotCard key={bot.id} bot={bot} />)
+            bots.data.map((bot) => <BotCard bot={bot} key={bot.id} />)
           ) : (
             <li className="col-span-full text-center text-gray-500">
               No bots in inventory yet — start by creating one.
@@ -25,7 +27,7 @@ export default async function ManageBots() {
             {bots.message || "Failed to load bots."}
           </li>
         )}
-      </ul>
-    </main>
+      </div>
+    </div>
   );
 }

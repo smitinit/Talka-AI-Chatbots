@@ -37,6 +37,7 @@ export async function addBot(
     return { ok: false, message };
   }
 
+  revalidatePath("/bots");
   return { ok: true, data };
 }
 
