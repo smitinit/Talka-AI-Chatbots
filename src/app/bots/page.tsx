@@ -2,6 +2,8 @@ import { getBots } from "@/ManageBot/bot.actions";
 import BotCard from "@/ManageBot/BotCard";
 import BotForm from "@/ManageBot/BotForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function ManageBots() {
   const bots = await getBots();
 
