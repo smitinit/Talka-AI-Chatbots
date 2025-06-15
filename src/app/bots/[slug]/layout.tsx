@@ -35,7 +35,7 @@ export default async function BotsLayout({
       <>
         <BotSidebarLayout>{children}</BotSidebarLayout>
       </>
-      <Toaster />
+      <Toaster position="top-center" />
     </BotProvider>
   );
 }

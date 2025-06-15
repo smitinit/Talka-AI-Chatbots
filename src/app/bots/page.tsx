@@ -4,6 +4,7 @@ import { Plus, BotIcon, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { getBots } from "@/ManageBot/bot.actions";
 import BotCard from "@/ManageBot/BotCard";
+import { Badge } from "@/components/ui/badge";
 
 function EmptyState() {
   return (
@@ -26,6 +27,25 @@ function EmptyState() {
           </Button>
         </CardContent>
       </Card>
+      <div className="mt-12 pt-8 border-t">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold mb-1">Need help getting started?</h3>
+            <p className="text-sm text-muted-foreground">
+              Check out our documentation and tutorials to make the most of your
+              bots.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" asChild>
+              <Link href="/#">View Docs</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/#">Browse Templates</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -62,43 +82,40 @@ export default async function BotManagementDashboard() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-7xl p-6">
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="mb-8 border-b pb-2">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight mb-2">
                 Bot Management
               </h1>
               <p className="text-muted-foreground text-lg">
-                Create and manage your AI bots from one central dashboard
+                Create and manage your AI bots.
               </p>
             </div>
-            <Button asChild size="lg" className="shrink-0">
-              <Link href="/bots/add">
-                <Plus className="mr-2 h-4 w-4" />
-                Add New Bot
-              </Link>
-            </Button>
+            {bots.ok && bots.data.length > 0 && (
+              <Button asChild size="lg" className="shrink-0">
+                <Link href="/bots/add">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add New Bot
+                </Link>
+              </Button>
+            )}
           </div>
-        </div>
+          {bots.ok && bots.data.length > 0 && (
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex items-center gap-6 ">
+                <p className="text-sm text-muted-foreground">
+                  Total Bots <Badge>{bots.data.length}</Badge>
+                </p>
 
-        {/* Stats Bar */}
-        {bots.ok && bots.data.length > 0 && (
-          <div className="mb-8 p-4 rounded-lg bg-muted/30 border">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-6">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Bots</p>
-                  <p className="text-2xl font-bold">{bots.data.length}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Active</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {bots.data.length}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">This Month</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                <p className="text-sm text-muted-foreground">
+                  Active{" "}
+                  <Badge className="bg-green-400">{bots.data.length}</Badge>
+                </p>
+
+                <p className="text-sm text-muted-foreground">
+                  This Month{" "}
+                  <Badge>
                     {
                       bots.data.filter((bot) => {
                         if (!bot.created_at) return false;
@@ -110,21 +127,20 @@ export default async function BotManagementDashboard() {
                         );
                       }).length
                     }
-                  </p>
-                </div>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                <p>
-                  You have{" "}
-                  <span className="font-semibold text-foreground">
-                    {bots.data.length}
-                  </span>{" "}
-                  {bots.data.length === 1 ? "bot" : "bots"} in your collection
+                  </Badge>
                 </p>
               </div>
+
+              <p className="text-sm text-muted-foreground">
+                You have{" "}
+                <span className="font-semibold text-foreground">
+                  {bots.data.length}
+                </span>{" "}
+                {bots.data.length === 1 ? "bot" : "bots"} in your collection
+              </p>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Bots Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -138,31 +154,6 @@ export default async function BotManagementDashboard() {
             <ErrorState message={bots.message} />
           )}
         </div>
-
-        {/* Quick Actions */}
-        {bots.ok && bots.data.length > 0 && (
-          <div className="mt-12 pt-8 border-t">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <h3 className="font-semibold mb-1">
-                  Need help getting started?
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Check out our documentation and tutorials to make the most of
-                  your bots.
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <Button variant="outline" asChild>
-                  <Link href="/#">View Docs</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link href="/#">Browse Templates</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
