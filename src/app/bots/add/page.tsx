@@ -1,4 +1,4 @@
-import BotForm from "@/ManageBot/BotForm";
+import BotForm from "@/ManageBot/ManageForm";
 
 export default function AddBotForm() {
   return (

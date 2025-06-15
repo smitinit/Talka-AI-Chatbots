@@ -1,5 +1,5 @@
 import { BotConfigsType } from "@/ConfigureBot/bot.schema";
-import BotConfigsForm from "@/ConfigureBot/botForm";
+import BotConfigsForm from "@/ConfigureBot/ConfigureForm";
 
 const fetchedConfigValues: BotConfigsType = {
   // ── Identity ──
@@ -72,7 +72,9 @@ const fetchedConfigValues: BotConfigsType = {
   jsonMode: false,
   toolUse: true,
 };
-export default function Configure() {
+export default async function Configure() {
+  await new Promise((res) => setTimeout(res, 500));
+
   return (
     <>
       <BotConfigsForm fetchedConfigs={fetchedConfigValues} />

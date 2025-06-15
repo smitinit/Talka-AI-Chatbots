@@ -26,22 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { botConfigSchema, BotConfigsType } from "./bot.schema";
 import { useTransition } from "react";
-
-function SectionHeader({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <div className="space-y-2 pb-4">
-      <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-      <p className="text-sm text-muted-foreground">{subtitle}</p>
-      <div className="h-px bg-border/50" />
-    </div>
-  );
-}
+import SectionHeader from "@/components/section-header";
 
 export default function BotConfigsForm({
   fetchedConfigs,
@@ -64,9 +49,9 @@ export default function BotConfigsForm({
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-foreground">
+    <div className="max-w-4xl mx-auto mb-8 py-10 px-4">
+      <div className="space-y-2 mb-12">
+        <h1 className="text-2xl md:text-3xl font-bold text-primary">
           Bot Configuration
         </h1>
         <p className="text-muted-foreground">

@@ -206,7 +206,7 @@ export default function BotSidebarLayout({
                   </Button>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Configure your AI assistant
+                  Manage your AI assistant
                 </p>
               </div>
 
@@ -219,7 +219,7 @@ export default function BotSidebarLayout({
 
         {/* Main Content */}
         <div className="flex-1 min-w-0">
-          <div className="p-6 lg:p-8">{children}</div>
+          <div className="p-6">{children}</div>
         </div>
       </div>
 
