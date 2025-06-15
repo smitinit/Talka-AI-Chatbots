@@ -1,16 +1,31 @@
+"use client";
+
+import Link from "next/link";
+import {
+  Sparkles,
+  Github,
+  Twitter,
+  Linkedin,
+  Mail,
+  ArrowUpRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 interface MenuItem {
   title: string;
   links: {
     text: string;
     url: string;
+    external?: boolean;
   }[];
 }
 
 interface FooterProps {
   logo?: {
     url: string;
-    src: string;
-    alt: string;
+    src?: string;
+    alt?: string;
     title: string;
   };
   tagline?: string;
@@ -24,106 +39,216 @@ interface FooterProps {
 
 const Footer = ({
   logo = {
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/block-1.svg",
-    alt: "blocks for shadcn/ui",
-    title: "Shadcnblocks.com",
-    url: "https://www.shadcnblocks.com",
+    url: "/",
+    title: "Talka",
+    alt: "Talka AI Bot Platform",
   },
-  tagline = "Components made easy.",
+  tagline = "Create intelligent AI bots with ease. No coding required.",
   menuItems = [
     {
       title: "Product",
       links: [
-        { text: "Overview", url: "#" },
-        { text: "Pricing", url: "#" },
-        { text: "Marketplace", url: "#" },
-        { text: "Features", url: "#" },
-        { text: "Integrations", url: "#" },
-        { text: "Pricing", url: "#" },
+        { text: "Dashboard", url: "/dashboard" },
+        { text: "Bot Builder", url: "/bots" },
+        { text: "Templates", url: "/templates" },
+        { text: "Analytics", url: "/analytics" },
+        { text: "Integrations", url: "/integrations" },
+        { text: "API", url: "/api-docs" },
       ],
     },
     {
       title: "Company",
       links: [
-        { text: "About", url: "#" },
-        { text: "Team", url: "#" },
-        { text: "Blog", url: "#" },
-        { text: "Careers", url: "#" },
-        { text: "Contact", url: "#" },
-        { text: "Privacy", url: "#" },
+        { text: "About Us", url: "/about" },
+        { text: "Careers", url: "/careers" },
+        { text: "Blog", url: "/blog" },
+        { text: "Press Kit", url: "/press" },
+        { text: "Contact", url: "/contact" },
+        { text: "Partners", url: "/partners" },
       ],
     },
     {
       title: "Resources",
       links: [
-        { text: "Help", url: "#" },
-        { text: "Sales", url: "#" },
-        { text: "Advertise", url: "#" },
+        { text: "Documentation", url: "/docs" },
+        { text: "Help Center", url: "/help" },
+        { text: "Community", url: "/community" },
+        { text: "Status", url: "/status", external: true },
+        { text: "Changelog", url: "/changelog" },
       ],
     },
     {
-      title: "Social",
+      title: "Legal",
       links: [
-        { text: "Twitter", url: "#" },
-        { text: "Instagram", url: "#" },
-        { text: "LinkedIn", url: "#" },
+        { text: "Privacy Policy", url: "/privacy" },
+        { text: "Terms of Service", url: "/terms" },
+        { text: "Cookie Policy", url: "/cookies" },
+        { text: "GDPR", url: "/gdpr" },
       ],
     },
   ],
-  copyright = "© 2024 Shadcnblocks.com. All rights reserved.",
-  bottomLinks = [
-    { text: "Terms and Conditions", url: "#" },
-    { text: "Privacy Policy", url: "#" },
-  ],
 }: FooterProps) => {
   return (
-    <section className="pt-32 px-8">
-      <div className="container">
-        <footer>
+    <footer className="relative border-t border-border/40 bg-background">
+      {/* Subtle background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-muted/20 via-transparent to-transparent pointer-events-none" />
+
+      <div className="relative">
+        <div className="container mx-auto px-4 pt-16 pb-8">
+          {/* Main footer content */}
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
+            {/* Brand section */}
             <div className="col-span-2 mb-8 lg:mb-0">
-              <div className="flex items-center gap-2 lg:justify-start">
-                <a href="#">
-                  {/* <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    title={logo.title}
-                    className="h-10"
-                  /> */}
-                </a>
-                <p className="text-xl font-semibold">{logo.title}</p>
+              <Link
+                href={logo.url}
+                className="flex items-center gap-3 mb-4 group"
+              >
+                <div className="relative">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                  </div>
+                  {/* Subtle glow effect */}
+                  <div className="absolute inset-0 rounded-xl bg-primary/20 blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                  {logo.title}
+                </span>
+              </Link>
+
+              <p className="text-muted-foreground leading-relaxed mb-6 max-w-sm">
+                {tagline}
+              </p>
+
+              {/* Newsletter signup */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-semibold text-foreground">
+                  Stay updated
+                </h4>
+                <div className="flex gap-2 max-w-sm">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 h-9 text-sm"
+                  />
+                  <Button size="sm" className="shrink-0">
+                    Subscribe
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Get the latest updates and features delivered to your inbox.
+                </p>
               </div>
-              <p className="mt-4 font-bold">{tagline}</p>
             </div>
+
+            {/* Menu sections */}
             {menuItems.map((section, sectionIdx) => (
-              <div key={sectionIdx}>
-                <h3 className="mb-4 font-bold">{section.title}</h3>
-                <ul className="space-y-4 text-muted-foreground">
+              <div key={sectionIdx} className="space-y-4">
+                <h3 className="text-sm font-semibold text-foreground tracking-wide">
+                  {section.title}
+                </h3>
+                <ul className="space-y-3">
                   {section.links.map((link, linkIdx) => (
-                    <li
-                      key={linkIdx}
-                      className="font-medium hover:text-primary"
-                    >
-                      <a href={link.url}>{link.text}</a>
+                    <li key={linkIdx}>
+                      {link.external ? (
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1 group"
+                        >
+                          {link.text}
+                          <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.url}
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 block"
+                        >
+                          {link.text}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="mt-24 flex flex-col justify-between gap-4 border-t py-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
-            <p>{copyright}</p>
-            <ul className="flex gap-4">
-              {bottomLinks.map((link, linkIdx) => (
-                <li key={linkIdx} className="underline hover:text-primary">
-                  <a href={link.url}>{link.text}</a>
-                </li>
-              ))}
-            </ul>
+
+          {/* Social links section */}
+          <div className="mt-12 pt-8 border-t border-border/40">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Follow us
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    asChild
+                  >
+                    <a
+                      href="https://twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Twitter className="h-4 w-4" />
+                      <span className="sr-only">Twitter</span>
+                    </a>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    asChild
+                  >
+                    <a
+                      href="https://github.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Github className="h-4 w-4" />
+                      <span className="sr-only">GitHub</span>
+                    </a>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    asChild
+                  >
+                    <a
+                      href="https://linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin className="h-4 w-4" />
+                      <span className="sr-only">LinkedIn</span>
+                    </a>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    asChild
+                  >
+                    <a href="mailto:hello@talka.com">
+                      <Mail className="h-4 w-4" />
+                      <span className="sr-only">Email</span>
+                    </a>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                <span>Made with ❤️ for the AI community</span>
+              </div>
+            </div>
           </div>
-        </footer>
+        </div>
       </div>
-    </section>
+    </footer>
   );
 };
 

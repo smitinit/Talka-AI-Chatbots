@@ -1,4 +1,51 @@
+// "use client";
+
+// import {
+//   SignedIn,
+//   SignedOut,
+//   SignInButton,
+//   SignUpButton,
+//   UserButton,
+// } from "@clerk/nextjs";
+// import Link from "next/link";
+// import { ThemeToggle } from "./theme-toggle";
+
+// export default function Navbar() {
+//   return (
+//     <nav
+//       className="relative flex justify-between items-center w-full p-4 m-0 gap-4 border-b border-border/10 rounded-none shadow-none z-[100]
+//     bg-[rgba(191,219,254,0.2)] backdrop-blur-md
+//     dark:bg-[rgba(59,130,246,0.1)] dark:backdrop-blur-md"
+//     >
+//       {/* Optional soft conic glow in center */}
+//       <div
+//         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+//       h-[200%] w-[200%] pointer-events-none -z-10
+//       rounded-full blur-[80px] opacity-20
+//       bg-[conic-gradient(at_center,_#93c5fd_0deg,_#bfdbfe_90deg,_#93c5fd_180deg,_#bfdbfe_270deg)]
+//       dark:bg-[conic-gradient(at_center,_#3b82f6_0deg,_#60a5fa_90deg,_#3b82f6_180deg,_#60a5fa_270deg)]"
+//       />
+
+//       <Link href="/" className="text-3xl font-semibold z-10 ">
+//         Talka
+//       </Link>
+
+//       <div className="flex items-center gap-2 z-10">
+//         <ThemeToggle />
+//         <SignedOut>
+//           <SignInButton />
+//           <SignUpButton />
+//         </SignedOut>
+//         <SignedIn>
+//           <UserButton />
+//         </SignedIn>
+//       </div>
+//     </nav>
+//   );
+// }
 "use client";
+
+import type React from "react";
 
 import {
   SignedIn,
@@ -8,28 +55,300 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { Card } from "./ui/card";
+import { Menu, X, Bot, Home, Settings, FileText, Sparkles } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+
+const navigationItems = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    description: "Manage your AI bots and view analytics",
+    icon: Home,
+  },
+  {
+    title: "Bots",
+    href: "/bots",
+    description: "Create and configure your AI assistants",
+    icon: Bot,
+  },
+  {
+    title: "Templates",
+    href: "/templates",
+    description: "Pre-built bot templates for quick setup",
+    icon: FileText,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    description: "Account and application preferences",
+    icon: Settings,
+  },
+];
+
+const resources = [
+  {
+    title: "Documentation",
+    href: "/docs",
+    description: "Learn how to build and deploy AI bots",
+  },
+  {
+    title: "API Reference",
+    href: "/api-docs",
+    description: "Complete API documentation and examples",
+  },
+  {
+    title: "Community",
+    href: "/community",
+    description: "Join our community of bot builders",
+  },
+  {
+    title: "Support",
+    href: "/support",
+    description: "Get help from our support team",
+  },
+];
 
 export default function Navbar() {
-  return (
-    <header className="border-b z-100  w-full h-fit">
-      <Card className="flex justify-between bg-transparent backdrop-blur-sm m-0  flex-row items-center gap-4 rounded-none border-none p-4 shadow-none">
-        <Link href="/" className="text-3xl">
-          Talka
-        </Link>
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <SignedOut>
-            <SignInButton />
-            <SignUpButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2 z-10">
+            <div className="relative">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              {/* Subtle glow effect */}
+              <div className="absolute inset-0 rounded-lg bg-primary/20 blur-md -z-10" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              Talka AI-Chatbots
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent/50">
+                    Products
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {navigationItems.map((item) => (
+                        <ListItem
+                          key={item.title}
+                          title={item.title}
+                          href={item.href}
+                          icon={item.icon}
+                        >
+                          {item.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-accent/50">
+                    Resources
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {resources.map((resource) => (
+                        <ListItem
+                          key={resource.title}
+                          title={resource.title}
+                          href={resource.href}
+                        >
+                          {resource.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href="/pricing" passHref>
+                    {/* <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
+                      Pricing
+                    </NavigationMenuLink> */}
+                    <Button variant="ghost">Pricing</Button>
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
+          {/* Right side actions */}
+          <div className="flex items-center space-x-3">
+            <ThemeToggle />
+
+            <SignedOut>
+              <div className="hidden sm:flex items-center space-x-2">
+                <SignInButton mode="modal">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button size="sm" className="bg-primary hover:bg-primary/90">
+                    Get Started
+                  </Button>
+                </SignUpButton>
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="hidden sm:flex"
+              >
+                <Link href="/bots">Dashboard</Link>
+              </Button>
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "h-8 w-8",
+                    userButtonPopoverCard: "shadow-lg border",
+                  },
+                }}
+              />
+            </SignedIn>
+
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </Button>
+          </div>
         </div>
-      </Card>
-    </header>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </Link>
+                );
+              })}
+
+              <div className="border-t border-border/40 pt-2 mt-2">
+                <Link
+                  href="/pricing"
+                  className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span>Pricing</span>
+                </Link>
+
+                <SignedOut>
+                  <div className="px-3 py-2 space-y-2">
+                    <SignInButton mode="modal">
+                      <Button variant="outline" size="sm" className="w-full">
+                        Sign In
+                      </Button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <Button size="sm" className="w-full">
+                        Get Started
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+
+                <SignedIn>
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span>Dashboard</span>
+                  </Link>
+                </SignedIn>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 }
+
+const ListItem = ({
+  className,
+  title,
+  children,
+  href,
+  icon: Icon,
+  ...props
+}: {
+  className?: string;
+  title: string;
+  children: React.ReactNode;
+  href: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          href={href}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground group",
+            className
+          )}
+          {...props}
+        >
+          <div className="flex items-center space-x-2">
+            {Icon && (
+              <Icon className="h-4 w-4 text-primary group-hover:text-primary/80" />
+            )}
+            <div className="text-sm font-medium leading-none">{title}</div>
+          </div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+};
