@@ -78,7 +78,7 @@ export default function BotCard({ bot }: { bot: BotType }) {
       </CardHeader>
 
       <CardContent className="pb-4">
-        <CardDescription className="text-sm leading-relaxed line-clamp-3 mb-4">
+        <CardDescription className="text-sm leading-relaxed line-clamp-2 mb-4">
           {bot.description}
         </CardDescription>
 

@@ -1,8 +1,9 @@
-export default async function Bot({
+export default async function BotPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug: botId } = await params;
+  const botId = params.slug;
+
   return <>{botId}</>;
 }

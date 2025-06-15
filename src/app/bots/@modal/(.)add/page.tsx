@@ -1,5 +1,5 @@
 import BotForm from "@/ManageBot/BotForm";
-import { Modal } from "./modal";
+import { Modal } from "../../../../components/modal";
 
 export default async function AddBotForm() {
   return (
