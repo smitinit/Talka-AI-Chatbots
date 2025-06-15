@@ -48,42 +48,42 @@ const Footer = ({
     {
       title: "Product",
       links: [
-        { text: "Dashboard", url: "/dashboard" },
-        { text: "Bot Builder", url: "/bots" },
-        { text: "Templates", url: "/templates" },
-        { text: "Analytics", url: "/analytics" },
-        { text: "Integrations", url: "/integrations" },
-        { text: "API", url: "/api-docs" },
+        { text: "Dashboard", url: "/bots" },
+        { text: "Bot Builder", url: "/#" },
+        { text: "Templates", url: "/#" },
+        { text: "Analytics", url: "/#" },
+        { text: "Integrations", url: "/#" },
+        { text: "API", url: "/#-docs" },
       ],
     },
     {
       title: "Company",
       links: [
-        { text: "About Us", url: "/about" },
-        { text: "Careers", url: "/careers" },
-        { text: "Blog", url: "/blog" },
-        { text: "Press Kit", url: "/press" },
-        { text: "Contact", url: "/contact" },
-        { text: "Partners", url: "/partners" },
+        { text: "About Us", url: "/#" },
+        { text: "Careers", url: "/#" },
+        { text: "Blog", url: "/#" },
+        { text: "Press Kit", url: "/#" },
+        { text: "Contact", url: "/#" },
+        { text: "Partners", url: "/#" },
       ],
     },
     {
       title: "Resources",
       links: [
-        { text: "Documentation", url: "/docs" },
-        { text: "Help Center", url: "/help" },
-        { text: "Community", url: "/community" },
-        { text: "Status", url: "/status", external: true },
-        { text: "Changelog", url: "/changelog" },
+        { text: "Documentation", url: "/#" },
+        { text: "Help Center", url: "/#" },
+        { text: "Community", url: "/#" },
+        { text: "Status", url: "/#", external: true },
+        { text: "Changelog", url: "/#" },
       ],
     },
     {
       title: "Legal",
       links: [
-        { text: "Privacy Policy", url: "/privacy" },
-        { text: "Terms of Service", url: "/terms" },
-        { text: "Cookie Policy", url: "/cookies" },
-        { text: "GDPR", url: "/gdpr" },
+        { text: "Privacy Policy", url: "/#" },
+        { text: "Terms of Service", url: "/#" },
+        { text: "Cookie Policy", url: "/#" },
+        { text: "GDPR", url: "/#" },
       ],
     },
   ],
@@ -94,7 +94,7 @@ const Footer = ({
       <div className="absolute inset-0 bg-gradient-to-t from-muted/20 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative">
-        <div className="container mx-auto px-4 pt-16 pb-8">
+        <div className="container mx-auto px-10 pt-16 pb-8">
           {/* Main footer content */}
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             {/* Brand section */}

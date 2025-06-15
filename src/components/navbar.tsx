@@ -1,48 +1,3 @@
-// "use client";
-
-// import {
-//   SignedIn,
-//   SignedOut,
-//   SignInButton,
-//   SignUpButton,
-//   UserButton,
-// } from "@clerk/nextjs";
-// import Link from "next/link";
-// import { ThemeToggle } from "./theme-toggle";
-
-// export default function Navbar() {
-//   return (
-//     <nav
-//       className="relative flex justify-between items-center w-full p-4 m-0 gap-4 border-b border-border/10 rounded-none shadow-none z-[100]
-//     bg-[rgba(191,219,254,0.2)] backdrop-blur-md
-//     dark:bg-[rgba(59,130,246,0.1)] dark:backdrop-blur-md"
-//     >
-//       {/* Optional soft conic glow in center */}
-//       <div
-//         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-//       h-[200%] w-[200%] pointer-events-none -z-10
-//       rounded-full blur-[80px] opacity-20
-//       bg-[conic-gradient(at_center,_#93c5fd_0deg,_#bfdbfe_90deg,_#93c5fd_180deg,_#bfdbfe_270deg)]
-//       dark:bg-[conic-gradient(at_center,_#3b82f6_0deg,_#60a5fa_90deg,_#3b82f6_180deg,_#60a5fa_270deg)]"
-//       />
-
-//       <Link href="/" className="text-3xl font-semibold z-10 ">
-//         Talka
-//       </Link>
-
-//       <div className="flex items-center gap-2 z-10">
-//         <ThemeToggle />
-//         <SignedOut>
-//           <SignInButton />
-//           <SignUpButton />
-//         </SignedOut>
-//         <SignedIn>
-//           <UserButton />
-//         </SignedIn>
-//       </div>
-//     </nav>
-//   );
-// }
 "use client";
 
 import type React from "react";
@@ -72,7 +27,7 @@ import { cn } from "@/lib/utils";
 const navigationItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/bots",
     description: "Manage your AI bots and view analytics",
     icon: Home,
   },
@@ -84,13 +39,13 @@ const navigationItems = [
   },
   {
     title: "Templates",
-    href: "/templates",
+    href: "/#",
     description: "Pre-built bot templates for quick setup",
     icon: FileText,
   },
   {
     title: "Settings",
-    href: "/settings",
+    href: "/#",
     description: "Account and application preferences",
     icon: Settings,
   },
@@ -99,22 +54,22 @@ const navigationItems = [
 const resources = [
   {
     title: "Documentation",
-    href: "/docs",
+    href: "/#",
     description: "Learn how to build and deploy AI bots",
   },
   {
     title: "API Reference",
-    href: "/api-docs",
+    href: "/#",
     description: "Complete API documentation and examples",
   },
   {
     title: "Community",
-    href: "/community",
+    href: "/#",
     description: "Join our community of bot builders",
   },
   {
     title: "Support",
-    href: "/support",
+    href: "/#",
     description: "Get help from our support team",
   },
 ];
@@ -187,10 +142,7 @@ export default function Navbar() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/pricing" passHref>
-                    {/* <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Pricing
-                    </NavigationMenuLink> */}
+                  <Link href="/#" passHref>
                     <Button variant="ghost">Pricing</Button>
                   </Link>
                 </NavigationMenuItem>
@@ -204,12 +156,12 @@ export default function Navbar() {
 
             <SignedOut>
               <div className="hidden sm:flex items-center space-x-2">
-                <SignInButton mode="modal">
+                <SignInButton mode="redirect">
                   <Button variant="ghost" size="sm">
                     Sign In
                   </Button>
                 </SignInButton>
-                <SignUpButton mode="modal">
+                <SignUpButton mode="redirect">
                   <Button size="sm" className="bg-primary hover:bg-primary/90">
                     Get Started
                   </Button>
@@ -282,12 +234,12 @@ export default function Navbar() {
 
                 <SignedOut>
                   <div className="px-3 py-2 space-y-2">
-                    <SignInButton mode="modal">
+                    <SignInButton mode="redirect">
                       <Button variant="outline" size="sm" className="w-full">
                         Sign In
                       </Button>
                     </SignInButton>
-                    <SignUpButton mode="modal">
+                    <SignUpButton mode="redirect">
                       <Button size="sm" className="w-full">
                         Get Started
                       </Button>
@@ -297,7 +249,7 @@ export default function Navbar() {
 
                 <SignedIn>
                   <Link
-                    href="/dashboard"
+                    href="/bots"
                     className="flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
