@@ -1,19 +1,10 @@
 "use client";
 
-import { useTransition } from "react";
 import Link from "next/link";
 
-import { deleteBot } from "./bot-manage.actions";
-import type { Bot as BotType } from "./bot-manage.types";
+import type { Bot as BotType } from "./bot-create.types";
 
-import {
-  BotIcon,
-  Calendar,
-  Clock,
-  ExternalLink,
-  Settings,
-  Trash2,
-} from "lucide-react";
+import { BotIcon, Calendar, Clock, ExternalLink, Settings } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -26,13 +17,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default function BotCard({ bot }: { bot: BotType }) {
-  const [isPending, startTransition] = useTransition();
-
-  const handleDelete = async () => {
-    startTransition(() => {
-      deleteBot(bot.bot_id!);
-    });
-  };
+  // const handleDelete = async () => {
+  //   startTransition(() => {
+  //     deleteBot(bot.bot_id!);
+  //   });
+  // };
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -106,15 +95,6 @@ export default function BotCard({ bot }: { bot: BotType }) {
             <ExternalLink className="h-3 w-3 mr-1" />
             Open
           </Link>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleDelete}
-          disabled={isPending}
-          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-        >
-          <Trash2 className="h-3 w-3" />
         </Button>
       </CardFooter>
     </Card>

@@ -1,10 +1,10 @@
 "use server";
 
-import { createServerSupabaseClient } from "../db/supabase/client";
+import { createServerSupabaseClient } from "@/db/supabase/client";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 
-import { Bot } from "@/ManageBot/bot.types";
-import { botSchema } from "./bot-manage.schema";
+import type { Bot } from "./bot-create.types";
+import { botSchema } from "./bot-create.schema";
 import { revalidatePath } from "next/cache";
 
 import type { PostgrestError } from "@supabase/supabase-js";
