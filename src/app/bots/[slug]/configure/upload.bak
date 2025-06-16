@@ -1,0 +1,44 @@
+<!-- 
+  {/* Use Custom Docs */}
+  <FormField
+  control={form.control}
+  name="useDocs"
+  render={({ field }) => (
+    <FormItem className="flex items-center justify-between pt-2">
+      <div className="space-y-0.5">
+        <FormLabel>Custom Documents</FormLabel>
+        <FormDescription>
+          Train your bot on your own documents
+        </FormDescription>
+      </div>
+      <FormControl>
+        <Switch
+          checked={field.value}
+          onCheckedChange={field.onChange}
+        />
+      </FormControl>
+    </FormItem>
+  )}
+  />
+  {watchUpload && (
+  <div className="mt-4 rounded-md border border-dashed border-gray-300 p-4 md:col-span-2">
+    <div className="flex flex-col items-center gap-2 text-center">
+      <Upload className="h-8 w-8 text-gray-400" />
+      <p className="text-sm font-medium">
+        Drag & drop files or click to upload
+      </p>
+      <p className="text-muted-foreground text-xs">
+        Supports PDF, TXT, DOCX, and Markdown files (Max 10MB)
+      </p>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="mt-2"
+      >
+        Select Files
+      </Button>
+    </div>
+  </div>
+  )}
+  </div> -->

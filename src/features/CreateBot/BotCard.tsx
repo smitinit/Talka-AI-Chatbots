@@ -3,8 +3,8 @@
 import { useTransition } from "react";
 import Link from "next/link";
 
-import { deleteBot } from "@/ManageBot/bot.actions";
-import type { Bot as BotType } from "@/ManageBot/bot.types";
+import { deleteBot } from "./bot-manage.actions";
+import type { Bot as BotType } from "./bot-manage.types";
 
 import {
   BotIcon,

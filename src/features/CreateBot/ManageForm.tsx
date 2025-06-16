@@ -3,14 +3,14 @@
 import { startTransition, useActionState } from "react";
 import { useForm } from "react-hook-form";
 
-import { addBot } from "@/ManageBot/bot.actions";
+import { addBot } from "./bot-manage.actions";
 import {
   type BotFormInput as BotFormType,
   botSchema,
-} from "@/ManageBot/bot.schema";
+} from "./bot-manage.schema";
 
 import type { Result } from "@/types/result";
-import type { Bot } from "@/ManageBot/bot.types";
+import type { Bot } from "./bot-manage.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Label } from "@/components/ui/label";

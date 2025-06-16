@@ -1,5 +1,5 @@
-import { BotConfigsType } from "@/ConfigureBot/bot.schema";
-import BotConfigsForm from "@/ConfigureBot/ConfigureForm";
+import { BotConfigsType } from "@/features/ConfigureBot/bot-config.schema";
+import BotConfigsForm from "@/features/ConfigureBot/ConfigureForm";
 
 const fetchedConfigValues: BotConfigsType = {
   // ── Identity ──
