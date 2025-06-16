@@ -36,12 +36,45 @@ export default function BotSettingsForm({
 }) {
   const form = useForm<BotSettingsType>({
     resolver: zodResolver(botSettingsSchema),
-    defaultValues: fetchedSettings,
+    defaultValues: {
+      maxTokens: fetchedSettings.maxTokens ?? 2048,
+      topP: fetchedSettings.topP ?? 0.9,
+      topK: fetchedSettings.topK ?? 40,
+      stopSequences: fetchedSettings.stopSequences ?? "",
+
+      jsonMode: fetchedSettings.jsonMode ?? false,
+      toolUse: fetchedSettings.toolUse ?? false,
+      useWebSearch: fetchedSettings.useWebSearch ?? false,
+      siteUrl: fetchedSettings.siteUrl ?? "",
+      focusDomains: fetchedSettings.focusDomains ?? "",
+
+      loggingEnabled: fetchedSettings.loggingEnabled ?? true,
+      voiceMode: fetchedSettings.voiceMode ?? false,
+      rateLimitPerMin: fetchedSettings.rateLimitPerMin ?? 60,
+
+      webhookURL: fetchedSettings.webhookURL ?? "",
+      // tokenQuota: fetchedSettings.tokenQuota ?? 50_000,
+      // apiCallsThisMonth: fetchedSettings.apiCallsThisMonth ?? 0,
+      // billingPlan: fetchedSettings.billingPlan ?? "pro",
+    },
   });
   const [isPending, startTransition] = useTransition();
   const [showExpertMode, setShowExpertMode] = useState(false);
 
   function onSubmit(values: BotSettingsType) {
+    // const payload = {
+    //   ...values,
+    //   stopSequences:
+    //     values.stopSequences
+    //       ?.split(",")
+    //       .map((s) => s.trim())
+    //       .filter(Boolean) ?? [],
+    //   focusDomains:
+    //     values.focusDomains
+    //       ?.split(",")
+    //       .map((s) => s.trim())
+    //       .filter(Boolean) ?? [],
+    // };
     startTransition(() => {
       //db logic
       console.log(values);
@@ -430,7 +463,7 @@ export default function BotSettingsForm({
           </div>
 
           {/* Usage & Billing */}
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <SectionHeader
               title="Usage & Billing"
               subtitle="Monitor usage and billing information."
@@ -475,7 +508,7 @@ export default function BotSettingsForm({
                 </CardContent>
               </Card>
             </div>
-          </div>
+          </div> */}
 
           {/* Danger Zone */}
           <div className="space-y-6">

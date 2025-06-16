@@ -4,7 +4,7 @@ import type React from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Settings, Key, FolderCog, ChevronRight, Bot } from "lucide-react";
+import { Settings, Key, FolderCog, Bot, Home } from "lucide-react";
 import { useBot } from "./bot-context";
 import { Button } from "./ui/button";
 
@@ -28,96 +28,28 @@ export default function BotSidebarLayout({
 
   const navigationItems: NavigationItem[] = [
     {
+      id: "home",
+      title: "Home",
+      href: `/bots/${slug}`,
+      icon: <Home className="h-4 w-4" />,
+    },
+    {
       id: "configure",
       title: "Configure",
       href: `/bots/${slug}/configure`,
       icon: <Settings className="h-4 w-4" />,
-      // children: [
-      //   {
-      //     id: "personality",
-      //     title: "Personality",
-      //     href: `/bots/${slug}/configure/personality`,
-      //     icon: <Bot className="h-4 w-4" />,
-      //   },
-      //   {
-      //     id: "appearance",
-      //     title: "Appearance",
-      //     href: `/bots/${slug}/configure/appearance`,
-      //     icon: <Palette className="h-4 w-4" />,
-      //   },
-      //   {
-      //     id: "notifications",
-      //     title: "Notifications",
-      //     href: `/bots/${slug}/configure/notifications`,
-      //     icon: <Bell className="h-4 w-4" />,
-      //     badge: "3",
-      //   },
-      // ],
     },
     {
       id: "api",
       title: "API",
       href: `/bots/${slug}/talka-api`,
       icon: <Key className="h-4 w-4" />,
-      // children: [
-      //   {
-      //     id: "api-keys",
-      //     title: "API Keys",
-      //     href: `/bots/${slug}/talka-api/keys`,
-      //     icon: <Key className="h-4 w-4" />,
-      //   },
-      //   {
-      //     id: "webhooks",
-      //     title: "Webhooks",
-      //     href: `/bots/${slug}/talka-api/webhooks`,
-      //     icon: <Webhook className="h-4 w-4" />,
-      //   },
-      //   {
-      //     id: "endpoints",
-      //     title: "Endpoints",
-      //     href: `/bots/${slug}/talka-api/endpoints`,
-      //     icon: <Code className="h-4 w-4" />,
-      //   },
-      // ],
     },
     {
       id: "settings",
       title: "Settings",
       href: `/bots/${slug}/settings`,
       icon: <FolderCog className="h-4 w-4" />,
-      // children: [
-      //   {
-      //     id: "general",
-      //     title: "General",
-      //     href: `/bots/${slug}/settings/`,
-      //     icon: <Globe className="h-4 w-4" />,
-      //   },
-      //   // {
-      //   //   id: "security",
-      //   //   title: "Security",
-      //   //   href: `/bots/${slug}/settings/security`,
-      //   //   icon: <Shield className="h-4 w-4" />,
-      //   // },
-      //   // {
-      //   //   id: "team",
-      //   //   title: "Team",
-      //   //   href: `/bots/${slug}/settings/team`,
-      //   //   icon: <Users className="h-4 w-4" />,
-      //   // },
-      //   // {
-      //   //   id: "billing",
-      //   //   title: "Billing",
-      //   //   href: `/bots/${slug}/settings/billing`,
-      //   //   icon: <CreditCard className="h-4 w-4" />,
-      //   //   badge: "Pro",
-      //   // },
-      //   // {
-      //   //   id: "data",
-      //   //   title: "Data & Storage",
-      //   //   href: `/bots/${slug}/settings/data`,
-      //   //   icon: <Database className="h-4 w-4" />,
-      //   // },
-      // ],
     },
   ];
   const bot = useBot();
@@ -126,15 +58,8 @@ export default function BotSidebarLayout({
     return pathname === href;
   };
 
-  const isParentActive = (item: NavigationItem) => {
-    if (isActiveLink(item.href)) return true;
-    return item.children?.some((child) => isActiveLink(child.href)) || false;
-  };
-
   const renderNavigationItem = (item: NavigationItem, level = 0) => {
     const isActive = isActiveLink(item.href);
-    const isParentExpanded = isParentActive(item);
-    const hasChildren = item.children && item.children.length > 0;
 
     return (
       <div key={item.id} className="space-y-1">
@@ -162,22 +87,7 @@ export default function BotSidebarLayout({
               </Badge>
             )}
           </div>
-          {hasChildren && (
-            <ChevronRight
-              className={`h-4 w-4 shrink-0  ${
-                isParentExpanded ? "rotate-90" : ""
-              } ${isActive ? "text-primary" : "text-muted-foreground"}`}
-            />
-          )}
         </Link>
-
-        {hasChildren && isParentExpanded && (
-          <div className="space-y-1 pb-2">
-            {item.children!.map((child) =>
-              renderNavigationItem(child, level + 1)
-            )}
-          </div>
-        )}
       </div>
     );
   };
@@ -196,7 +106,7 @@ export default function BotSidebarLayout({
                     <h2>{bot.name}</h2>
                   </span>
                   <Button
-                    variant="outline"
+                    variant="link"
                     size="sm"
                     onClick={() => {
                       router.back();

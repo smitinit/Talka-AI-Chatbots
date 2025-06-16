@@ -18,15 +18,14 @@ export default async function BotsLayout({
   modal: ReactNode;
   params: { slug: string };
 }) {
-  console.log("asdasdf");
   const client = createServerSupabaseClient();
   const bot_id = params.slug;
-  // console.log(bot_id);
+
   const { error, data } = await client
     .from("bots")
     .select()
     .eq("bot_id", bot_id);
-  // console.log(data);
+
   if (error) throw new Error(error.message);
 
   return (
