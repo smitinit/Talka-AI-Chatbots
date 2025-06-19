@@ -62,9 +62,7 @@ const Footer = ({
         { text: "About Us", url: "/#" },
         { text: "Careers", url: "/#" },
         { text: "Blog", url: "/#" },
-        { text: "Press Kit", url: "/#" },
         { text: "Contact", url: "/#" },
-        { text: "Partners", url: "/#" },
       ],
     },
     {
@@ -82,8 +80,6 @@ const Footer = ({
       links: [
         { text: "Privacy Policy", url: "/#" },
         { text: "Terms of Service", url: "/#" },
-        { text: "Cookie Policy", url: "/#" },
-        { text: "GDPR", url: "/#" },
       ],
     },
   ],

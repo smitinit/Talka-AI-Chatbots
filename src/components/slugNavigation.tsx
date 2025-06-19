@@ -4,8 +4,14 @@ import type React from "react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Settings, Key, FolderCog, Bot, Home } from "lucide-react";
-import { useBot } from "./bot-context";
+import {
+  Bot,
+  LayoutDashboard,
+  SlidersHorizontal,
+  Code,
+  Settings2,
+} from "lucide-react";
+import { useBotData } from "./bot-context";
 import { Button } from "./ui/button";
 
 interface NavigationItem {
@@ -28,31 +34,32 @@ export default function BotSidebarLayout({
 
   const navigationItems: NavigationItem[] = [
     {
-      id: "home",
-      title: "Home",
+      id: "bot-overview",
+      title: "Bot Overview",
       href: `/bots/${slug}`,
-      icon: <Home className="h-4 w-4" />,
+      icon: <LayoutDashboard className="h-4 w-4" />,
     },
     {
       id: "configure",
-      title: "Configure",
+      title: "Configuration",
       href: `/bots/${slug}/configure`,
-      icon: <Settings className="h-4 w-4" />,
+      icon: <SlidersHorizontal className="h-4 w-4" />,
     },
     {
       id: "api",
-      title: "API",
+      title: "API Access",
       href: `/bots/${slug}/talka-api`,
-      icon: <Key className="h-4 w-4" />,
+      icon: <Code className="h-4 w-4" />,
     },
     {
       id: "settings",
-      title: "Settings",
+      title: "Advanced Settings",
       href: `/bots/${slug}/settings`,
-      icon: <FolderCog className="h-4 w-4" />,
+      icon: <Settings2 className="h-4 w-4" />,
     },
   ];
-  const bot = useBot();
+
+  const { bot } = useBotData();
 
   const isActiveLink = (href: string) => {
     return pathname === href;

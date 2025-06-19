@@ -16,17 +16,31 @@ export default function Error({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
-      <div className="bg-red-100 text-red-600 rounded-full p-4 mb-4">
+    <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
+      <div className="rounded-full bg-destructive/10 text-destructive p-4 mb-4">
         <AlertTriangle className="h-8 w-8" />
       </div>
-      <h1 className="text-2xl font-semibold mb-2">Something went wrong</h1>
+
+      <h1 className="text-2xl font-bold mb-1 text-destructive">
+        Something went wrong
+      </h1>
+
       <p className="text-muted-foreground mb-6 max-w-md">
-        We encountered an unexpected error. Please try again or return to the
-        home page.
+        We ran into an error while processing your request. You can retry or
+        head back to the dashboard.
       </p>
 
-      <div className="flex gap-4">
+      <div className="w-full max-w-xl bg-muted p-4 rounded-md text-sm text-left overflow-x-auto border border-border text-red-700">
+        <code>{error.message}</code>
+      </div>
+
+      {error.digest && (
+        <p className="text-xs text-muted-foreground mt-2">
+          Error reference: <span className="font-mono">{error.digest}</span>
+        </p>
+      )}
+
+      <div className="mt-6 flex gap-4">
         <form action={() => reset()}>
           <Button variant="default" type="submit">
             Retry

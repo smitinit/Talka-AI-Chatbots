@@ -9,24 +9,23 @@ import { Badge } from "@/components/ui/badge";
 function EmptyState() {
   return (
     <div className="col-span-full">
-      <Card className="border-dashed border-2 border-muted-foreground/25">
-        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="bg-muted/50 mb-6 flex h-20 w-20 items-center justify-center rounded-full">
-            <BotIcon className="text-muted-foreground h-10 w-10" />
-          </div>
-          <h3 className="text-2xl font-semibold mb-2">No bots yet</h3>
-          <p className="text-muted-foreground mb-8 max-w-md leading-relaxed">
-            You haven&apos;t created any AI bots yet. Start by creating your
-            first bot to begin automating conversations.
-          </p>
-          <Button asChild size="lg">
+      <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="bg-muted/50 mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+          <BotIcon className="text-muted-foreground h-10 w-10" />
+        </div>
+        <h3 className="text-2xl font-semibold mb-2">No bots yet</h3>
+        <p className="text-muted-foreground mb-8 max-w-md leading-relaxed">
+          You haven&apos;t created any AI bots yet. Start by creating your first
+          bot to begin automating conversations.
+        </p>
+        {/* <Button asChild size="lg">
             <Link href="/bots/add">
               <Plus className="mr-2 h-4 w-4" />
               Create Your First Bot
             </Link>
-          </Button>
-        </CardContent>
-      </Card>
+          </Button> */}
+      </CardContent>
+
       <div className="mt-12 pt-8 border-t">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
@@ -92,14 +91,13 @@ export default async function BotManagementDashboard() {
                 Create and manage your AI bots.
               </p>
             </div>
-            {bots.ok && bots.data.length > 0 && (
-              <Button asChild size="lg" className="shrink-0">
-                <Link href="/bots/add">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add New Bot
-                </Link>
-              </Button>
-            )}
+
+            <Button asChild size="lg" className="shrink-0">
+              <Link href="/bots/add">
+                <Plus className="mr-2 h-4 w-4" />
+                Add New Bot
+              </Link>
+            </Button>
           </div>
           {bots.ok && bots.data.length > 0 && (
             <div className="flex justify-between items-center mt-4">

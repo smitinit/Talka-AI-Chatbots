@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import type { Bot as BotType } from "./bot-create.types";
+import type { BotType } from "./bot-create.types";
 
 import { BotIcon, Calendar, Clock, ExternalLink, Settings } from "lucide-react";
 import {
@@ -17,11 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default function BotCard({ bot }: { bot: BotType }) {
-  // const handleDelete = async () => {
-  //   startTransition(() => {
-  //     deleteBot(bot.bot_id!);
-  //   });
-  // };
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {

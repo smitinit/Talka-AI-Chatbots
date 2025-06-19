@@ -4,13 +4,10 @@ import { startTransition, useActionState } from "react";
 import { useForm } from "react-hook-form";
 
 import { addBot } from "./bot-create.actions";
-import {
-  type BotFormInput as BotFormType,
-  botSchema,
-} from "./bot-create.schema";
+import { type BotFormInputType, botSchema } from "./bot-create.schema";
 
 import type { Result } from "@/types/result";
-import type { Bot } from "./bot-create.types";
+import type { BotType } from "./bot-create.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Label } from "@/components/ui/label";
@@ -27,14 +24,17 @@ export default function BotForm() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<BotFormType>({
+  } = useForm<BotFormInputType>({
     defaultValues: { name: "", description: "" },
     resolver: zodResolver(botSchema),
     mode: "onChange",
     shouldFocusError: false,
   });
 
-  const [state, dispatch, isPending] = useActionState<Result<Bot>, BotFormType>(
+  const [state, dispatch, isPending] = useActionState<
+    Result<BotType>,
+    BotFormInputType
+  >(
     async (_prevState, formData) => {
       const result = await addBot(formData.name, formData.description);
 
@@ -75,6 +75,7 @@ export default function BotForm() {
                   id="name"
                   placeholder="Enter bot name"
                   className="h-10"
+                  autoComplete="off"
                 />
                 {errors.name && (
                   <p className="text-destructive dark:text-yellow-200 text-sm">
@@ -90,6 +91,7 @@ export default function BotForm() {
                   placeholder="Enter bot description"
                   id="description"
                   className="h-10"
+                  autoComplete="off"
                 />
                 {errors.description && (
                   <p className="text-destructive dark:text-yellow-200 text-sm">

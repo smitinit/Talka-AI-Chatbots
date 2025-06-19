@@ -11,4 +11,4 @@ export const botSchema = z.object({
     .max(200, "Bot's description can not be more than 200 words"),
 });
 
-export type BotFormInput = z.infer<typeof botSchema>;
+export type BotFormInputType = z.infer<typeof botSchema>;

@@ -2,6 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,29 +25,79 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-
-import { botConfigSchema, type BotConfigType } from "./bot-config.schema";
-import { useTransition } from "react";
 import SectionHeader from "@/components/section-header";
+import { toast } from "sonner";
 
-export default function BotConfigForm({
-  fetchedConfigs,
-}: {
-  fetchedConfigs: BotConfigType;
-}) {
+import { useBotConfigs, useBotData } from "@/components/bot-context";
+import { botConfigSchema, type BotConfigType } from "./bot-config.schema";
+import { handleBotConfigUpdate } from "./bot-config.action";
+
+export default function BotConfigForm() {
+  const { configs, setConfigs } = useBotConfigs();
+
+  // user's saved configs
+  const fetchedConfigs = configs as BotConfigType;
+
+  // initialize the form and the validator
   const form = useForm<BotConfigType>({
     resolver: zodResolver(botConfigSchema),
     defaultValues: fetchedConfigs,
   });
+
+  // reset the form on changes and set the latest values and also reset isDirty to latest test
+  useEffect(() => {
+    if (configs) form.reset(configs);
+  }, [configs, form]);
+
+  // form states isDirty -> checks the existing config with current and isSubmitting -> persistive loader
+  const { isDirty, isSubmitting } = form.formState;
+
+  // warn user if there is any changes and he is closing the site
+  useEffect(() => {
+    const warnUser = (e: BeforeUnloadEvent) => {
+      if (form.formState.isDirty) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", warnUser);
+    return () => window.removeEventListener("beforeunload", warnUser);
+  }, [form.formState.isDirty]);
+
+  // hook
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  // get teh bot for the bot_id property
+  const { bot } = useBotData();
+
+  // this is for close/open of custom field
   const watchExpertise = form.watch("expertise");
 
+  // if no bot id throw err
+  if (!bot.bot_id) {
+    throw new Error("Bot does not exists.");
+  }
+
+  // submit function
   function onSubmit(values: BotConfigType) {
-    startTransition(() => {
-      //db logic
-      console.log(values);
+    startTransition(async () => {
+      // db call to update the configs
+      const result = await handleBotConfigUpdate(bot.bot_id!, values);
+
+      if (!result.ok) {
+        toast.error(result.message);
+      } else {
+        const updated = result.data!;
+
+        // update the global store
+        setConfigs(updated);
+
+        toast.success(fetchedConfigs ? "Config updated!" : "Config saved!");
+
+        // reload the page for stailing of the data
+        router.refresh();
+      }
     });
-    return null;
   }
 
   return (
@@ -75,9 +127,13 @@ export default function BotConfigForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bot Name</FormLabel>
+                    <FormLabel htmlFor="name">Bot Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter bot name" {...field} />
+                      <Input
+                        id="name"
+                        placeholder="Enter bot name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -89,13 +145,13 @@ export default function BotConfigForm({
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel htmlFor="gender">Gender</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="gender">
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                         <SelectContent>
@@ -115,9 +171,10 @@ export default function BotConfigForm({
                 name="avatar"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Avatar URL</FormLabel>
+                    <FormLabel htmlFor="avatar">Avatar URL</FormLabel>
                     <FormControl>
                       <Input
+                        id="avatar"
                         placeholder="https://example.com/avatar.jpg"
                         {...field}
                       />
@@ -135,9 +192,13 @@ export default function BotConfigForm({
                 name="voice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Voice</FormLabel>
+                    <FormLabel htmlFor="voice">Voice</FormLabel>
                     <FormControl>
-                      <Input placeholder="Voice identifier" {...field} />
+                      <Input
+                        id="voice"
+                        placeholder="Voice identifier"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription>
                       Optional: Voice configuration for TTS
@@ -161,9 +222,10 @@ export default function BotConfigForm({
               name="persona"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Persona</FormLabel>
+                  <FormLabel htmlFor="persona">Persona</FormLabel>
                   <FormControl>
                     <Textarea
+                      id="persona"
                       placeholder="Describe your bot's personality and character traits..."
                       className="min-h-[100px] resize-none"
                       {...field}
@@ -179,9 +241,10 @@ export default function BotConfigForm({
               name="botthesis"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bot Mission & Thesis</FormLabel>
+                  <FormLabel htmlFor="thesis">Bot Mission & Thesis</FormLabel>
                   <FormControl>
                     <Textarea
+                      id="thesis"
                       placeholder="What's your bot's purpose, goal, or philosophy?"
                       className="min-h-[100px] resize-none"
                       {...field}
@@ -198,9 +261,10 @@ export default function BotConfigForm({
                 name="backstory"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Backstory</FormLabel>
+                    <FormLabel htmlFor="backstory">Backstory</FormLabel>
                     <FormControl>
                       <Textarea
+                        id="backstory"
                         placeholder="Optional: Bot's background story..."
                         className="min-h-[80px] resize-none"
                         {...field}
@@ -216,9 +280,10 @@ export default function BotConfigForm({
                 name="goals"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Goals</FormLabel>
+                    <FormLabel htmlFor="goals">Goals</FormLabel>
                     <FormControl>
                       <Textarea
+                        id="goals"
                         placeholder="Optional: Bot's objectives and goals..."
                         className="min-h-[80px] resize-none"
                         {...field}
@@ -233,16 +298,16 @@ export default function BotConfigForm({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
                 control={form.control}
-                name="toneStyle"
+                name="tone_style"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tone Style</FormLabel>
+                    <FormLabel htmlFor="tone">Tone Style</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="tone">
                           <SelectValue placeholder="Select tone style" />
                         </SelectTrigger>
                         <SelectContent>
@@ -263,16 +328,16 @@ export default function BotConfigForm({
 
               <FormField
                 control={form.control}
-                name="writingStyle"
+                name="writing_style"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Writing Style</FormLabel>
+                    <FormLabel htmlFor="writing">Writing Style</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="writing">
                           <SelectValue placeholder="Select writing style" />
                         </SelectTrigger>
                         <SelectContent>
@@ -290,16 +355,18 @@ export default function BotConfigForm({
 
               <FormField
                 control={form.control}
-                name="responseStyle"
+                name="response_style"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Response Style</FormLabel>
+                    <FormLabel htmlFor="response-style">
+                      Response Style
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="response-style">
                           <SelectValue placeholder="Select response style" />
                         </SelectTrigger>
                         <SelectContent>
@@ -320,12 +387,15 @@ export default function BotConfigForm({
 
             <FormField
               control={form.control}
-              name="knowledgeScope"
+              name="knowledge_scope"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Knowledge Scope</FormLabel>
+                  <FormLabel htmlFor="knowledge-scope">
+                    Knowledge Scope
+                  </FormLabel>
                   <FormControl>
                     <Input
+                      id="knowledge-scope"
                       placeholder="Define knowledge boundaries and focus areas"
                       {...field}
                     />
@@ -346,16 +416,18 @@ export default function BotConfigForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="languagePreference"
+                name="language_preference"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Default Language</FormLabel>
+                    <FormLabel htmlFor="default-language">
+                      Default Language
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="default-language">
                           <SelectValue placeholder="Select language" />
                         </SelectTrigger>
                         <SelectContent>
@@ -376,17 +448,19 @@ export default function BotConfigForm({
               <div className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="useEmojis"
+                  name="use_emojis"
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <FormLabel>Use Emojis</FormLabel>
+                        <FormLabel htmlFor="emoji">Use Emojis</FormLabel>
                         <FormDescription>
                           Allow bot to use emojis in responses
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
+                          id="emoji"
+                          aria-label="Use emojis in responses"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
@@ -397,38 +471,21 @@ export default function BotConfigForm({
 
                 <FormField
                   control={form.control}
-                  name="allowProfanity"
+                  name="include_citations"
                   render={({ field }) => (
                     <FormItem className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <FormLabel>Allow Profanity</FormLabel>
-                        <FormDescription>
-                          Permit mild profanity in responses
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="includeCitations"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <FormLabel>Include Citations</FormLabel>
+                        <FormLabel htmlFor="citations">
+                          Include Citations
+                        </FormLabel>
                         <FormDescription>
                           Add source citations to responses
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
+                          id="citations"
+                          aria-label="include citations"
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
@@ -452,9 +509,10 @@ export default function BotConfigForm({
               name="greeting"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Greeting Message</FormLabel>
+                  <FormLabel htmlFor="greet">Greeting Message</FormLabel>
                   <FormControl>
                     <Textarea
+                      id="greet"
                       placeholder="How should your bot introduce itself?"
                       className="min-h-[80px] resize-none"
                       {...field}
@@ -470,9 +528,10 @@ export default function BotConfigForm({
               name="fallback"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fallback Response</FormLabel>
+                  <FormLabel htmlFor="fallback">Fallback Response</FormLabel>
                   <FormControl>
                     <Textarea
+                      id="fallback"
                       placeholder="What should your bot say when it doesn't know the answer?"
                       className="min-h-[80px] resize-none"
                       {...field}
@@ -497,13 +556,13 @@ export default function BotConfigForm({
                 name="expertise"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Expertise Area</FormLabel>
+                    <FormLabel htmlFor="expertise">Expertise Area</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="expertise">
                           <SelectValue placeholder="Select expertise" />
                         </SelectTrigger>
                         <SelectContent>
@@ -526,9 +585,10 @@ export default function BotConfigForm({
                   name="customexpertise"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Custom Expertise</FormLabel>
+                      <FormLabel htmlFor="custom">Custom Expertise</FormLabel>
                       <FormControl>
                         <Input
+                          id="custom"
                           placeholder="Describe your custom expertise area"
                           {...field}
                         />
@@ -551,16 +611,16 @@ export default function BotConfigForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="contentFilterLevel"
+                name="content_filter_level"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Content Filter Level</FormLabel>
+                    <FormLabel htmlFor="filter">Content Filter Level</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="filter">
                           <SelectValue placeholder="Select filter level" />
                         </SelectTrigger>
                         <SelectContent>
@@ -577,17 +637,21 @@ export default function BotConfigForm({
 
               <FormField
                 control={form.control}
-                name="customModeration"
+                name="custom_moderation"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between pt-2">
                     <div className="space-y-0.5">
-                      <FormLabel>Custom Moderation</FormLabel>
+                      <FormLabel htmlFor="moderation">
+                        Custom Moderation
+                      </FormLabel>
                       <FormDescription>
                         Enable custom moderation rules
                       </FormDescription>
                     </div>
                     <FormControl>
                       <Switch
+                        id="moderation"
+                        aria-label="include custom moderation"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
@@ -608,16 +672,16 @@ export default function BotConfigForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
-                name="memoryType"
+                name="memory_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Memory Type</FormLabel>
+                    <FormLabel htmlFor="memory">Memory Type</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="memory">
                           <SelectValue placeholder="Select memory type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -639,16 +703,18 @@ export default function BotConfigForm({
 
               <FormField
                 control={form.control}
-                name="memoryExpiration"
+                name="memory_expiration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Memory Expiration</FormLabel>
+                    <FormLabel htmlFor="memory-expiration">
+                      Memory Expiration
+                    </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="memory-expiration">
                           <SelectValue placeholder="Select duration" />
                         </SelectTrigger>
                         <SelectContent>
@@ -672,8 +738,12 @@ export default function BotConfigForm({
 
           {/* Submit Button */}
           <div className="flex justify-end pt-6 border-t border-border/50">
-            <Button type="submit" disabled={isPending} className="px-8">
-              {isPending ? "Saving..." : "Save Configuration"}
+            <Button
+              type="submit"
+              className="px-8"
+              disabled={isPending || !isDirty || isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save Configuration"}
             </Button>
           </div>
         </form>
