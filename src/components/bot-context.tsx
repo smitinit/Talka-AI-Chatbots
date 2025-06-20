@@ -1,7 +1,8 @@
 "use client";
 
+import { ApiKeyRow } from "@/features/ApiBot/api.schema";
 import type { BotConfigType } from "@/features/ConfigureBot/bot-config.schema";
-import type { BotType } from "@/features/CreateBot/bot-create.types";
+import type { BotType } from "@/features/CreateBot/bot-create.schema";
 import type { BotSettingsType } from "@/features/SettingBot/bot-setting.schema";
 import {
   createContext,
@@ -16,6 +17,7 @@ export interface FullBotType {
   bot: BotType;
   botConfigs: BotConfigType;
   botSettings: BotSettingsType;
+  api: ApiKeyRow[];
 }
 
 type BotContextType = {
@@ -27,6 +29,9 @@ type BotContextType = {
 
   settings: BotSettingsType;
   setSettings: Dispatch<SetStateAction<BotSettingsType>>;
+
+  api: ApiKeyRow[];
+  setApi: Dispatch<SetStateAction<ApiKeyRow[]>>;
 };
 const BotContext = createContext<BotContextType | null>(null);
 
@@ -40,11 +45,37 @@ export function BotProvider({
   const [bot, setBot] = useState(initials.bot);
   const [configs, setConfigs] = useState(initials.botConfigs);
   const [settings, setSettings] = useState(initials.botSettings);
+  const [api, setApi] = useState<ApiKeyRow[]>(
+    Array.isArray(initials.api) ? initials.api : []
+  );
 
   const values = useMemo<BotContextType>(
-    () => ({ bot, setBot, configs, setConfigs, settings, setSettings }),
-    [bot, configs, settings]
+    () => ({
+      bot,
+      setBot,
+      configs,
+      setConfigs,
+      settings,
+      setSettings,
+      api,
+      setApi,
+    }),
+    [bot, configs, settings, api]
   );
+  // console.log(
+  //   "DATA ONLY",
+  //   JSON.stringify(
+  //     {
+  //       bot: values.bot,
+  //       configs: values.configs,
+  //       settings: values.settings,
+  //       api: values.api,
+  //     },
+  //     null,
+  //     2
+  //   )
+  // );
+
   return <BotContext.Provider value={values}>{children}</BotContext.Provider>;
 }
 
@@ -67,4 +98,8 @@ export function useBotConfigs() {
 export function useBotSettings() {
   const { settings, setSettings } = useBot();
   return { settings, setSettings };
+}
+export function useBotApi() {
+  const { api, setApi } = useBot();
+  return { api, setApi };
 }

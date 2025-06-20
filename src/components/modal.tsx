@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -19,7 +18,7 @@ export function Modal({ children }: { children: React.ReactNode }) {
     }
   }
 
-  return createPortal(
+  return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="bg-card rounded-xl p-0 border-none shadow-none ">
         <VisuallyHidden>
@@ -31,7 +30,6 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
         {children}
       </DialogContent>
-    </Dialog>,
-    document.getElementById("modal-root")!
+    </Dialog>
   );
 }

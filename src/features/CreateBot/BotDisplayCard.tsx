@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import type { BotType } from "./bot-create.types";
+import type { BotType } from "./bot-create.schema";
 
 import { BotIcon, Calendar, Clock, ExternalLink, Settings } from "lucide-react";
 import {
@@ -15,20 +15,9 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils";
 
 export default function BotCard({ bot }: { bot: BotType }) {
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  };
-
   return (
     <Card className="group hover:shadow-lg transition-all duration-200 hover:border-primary/20 bg-card">
       <CardHeader className="pb-3">

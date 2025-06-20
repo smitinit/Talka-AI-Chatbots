@@ -44,7 +44,6 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </ClerkProvider>
-        <div id="modal-root"></div>
       </body>
     </html>
   );

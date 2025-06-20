@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, BotIcon, AlertCircle } from "lucide-react";
@@ -18,12 +20,6 @@ function EmptyState() {
           You haven&apos;t created any AI bots yet. Start by creating your first
           bot to begin automating conversations.
         </p>
-        {/* <Button asChild size="lg">
-            <Link href="/bots/add">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Your First Bot
-            </Link>
-          </Button> */}
       </CardContent>
 
       <div className="mt-12 pt-8 border-t">
@@ -99,23 +95,23 @@ export default async function BotManagementDashboard() {
               </Link>
             </Button>
           </div>
-          {bots.ok && bots.data.length > 0 && (
+          {bots.ok && bots.data!.length > 0 && (
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center gap-6 ">
                 <p className="text-sm text-muted-foreground">
-                  Total Bots <Badge>{bots.data.length}</Badge>
+                  Total Bots <Badge>{bots.data!.length}</Badge>
                 </p>
 
                 <p className="text-sm text-muted-foreground">
                   Active{" "}
-                  <Badge className="bg-green-400">{bots.data.length}</Badge>
+                  <Badge className="bg-green-400">{bots.data!.length}</Badge>
                 </p>
 
                 <p className="text-sm text-muted-foreground">
                   This Month{" "}
                   <Badge>
                     {
-                      bots.data.filter((bot) => {
+                      bots.data!.filter((bot) => {
                         if (!bot.created_at) return false;
                         const created = new Date(bot.created_at);
                         const now = new Date();
@@ -132,9 +128,9 @@ export default async function BotManagementDashboard() {
               <p className="text-sm text-muted-foreground">
                 You have{" "}
                 <span className="font-semibold text-foreground">
-                  {bots.data.length}
+                  {bots.data!.length}
                 </span>{" "}
-                {bots.data.length === 1 ? "bot" : "bots"} in your collection
+                {bots.data!.length === 1 ? "bot" : "bots"} in your collection
               </p>
             </div>
           )}
@@ -143,8 +139,8 @@ export default async function BotManagementDashboard() {
         {/* Bots Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {bots.ok ? (
-            bots.data.length > 0 ? (
-              bots.data.map((bot) => <BotCard key={bot.bot_id} bot={bot} />)
+            bots.data!.length > 0 ? (
+              bots.data!.map((bot) => <BotCard key={bot.bot_id} bot={bot} />)
             ) : (
               <EmptyState />
             )

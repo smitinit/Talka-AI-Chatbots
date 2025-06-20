@@ -153,7 +153,14 @@ export default function Navbar() {
           {/* Right side actions */}
           <div className="flex items-center space-x-3">
             <ThemeToggle />
-
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="hidden sm:flex"
+            >
+              <Link href="/bots">Dashboard</Link>
+            </Button>
             <SignedOut>
               <div className="hidden sm:flex items-center space-x-2">
                 <SignInButton mode="redirect">
@@ -170,14 +177,6 @@ export default function Navbar() {
             </SignedOut>
 
             <SignedIn>
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="hidden sm:flex"
-              >
-                <Link href="/bots">Dashboard</Link>
-              </Button>
               <UserButton
                 appearance={{
                   elements: {

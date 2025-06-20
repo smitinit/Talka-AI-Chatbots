@@ -12,3 +12,13 @@ export const botSchema = z.object({
 });
 
 export type BotFormInputType = z.infer<typeof botSchema>;
+
+export type BotType = {
+  id?: number;
+  bot_id?: string;
+  name: string;
+  description: string;
+  user_id?: string;
+  created_at?: string;
+  updated_at?: string;
+};

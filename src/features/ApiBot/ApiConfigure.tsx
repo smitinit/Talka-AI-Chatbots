@@ -1,10 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Button,
-  buttonVariants, // <- if you use shadcn/ui variants
-} from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,17 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -32,62 +17,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Key, Plus, Trash2 } from "lucide-react";
+import { Key, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-interface ApiKey {
-  id: string;
-  projectNumber: string;
-  projectName: string;
-  apiKey: string;
-  created: string;
-  plan: string;
-}
+import CreateApiKeyDialog from "./CreateApiKeyDialog";
+import { useBotApi, useBotData } from "@/components/bot-context";
+import { formatDate } from "@/lib/utils";
+import { deleteApiKey } from "./api.actions";
+import { useTransition } from "react";
 
 export default function ApiConfig() {
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [keyName, setKeyName] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
+  const { api: apiKeys, setApi } = useBotApi();
+  const [isPending, startTransition] = useTransition();
 
-  const generateApiKey = () =>
-    `gsk_${Math.random().toString(36).slice(2)}${Math.random()
-      .toString(36)
-      .slice(2)}`;
+  function handleDeleteClick(api_id: string) {
+    startTransition(async () => {
+      const result = await deleteApiKey(api_id);
 
-  const handleCreateApiKey = async () => {
-    if (!keyName.trim()) return;
-    setIsCreating(true);
-    await new Promise((r) => setTimeout(r, 1_000));
+      if (!result.ok) {
+        toast.error(result.message || "Failed to delete API key");
+        return;
+      }
 
-    const newKey: ApiKey = {
-      id: Math.random().toString(36).slice(2),
-      projectNumber: Math.floor(Math.random() * 1_000_000_000).toString(),
-      projectName: keyName,
-      apiKey: generateApiKey(),
-      created: new Date().toLocaleDateString(),
-      plan: "Free",
-    };
+      setApi((prev) => prev.filter((key) => key.api_id !== api_id));
+      toast.success("API key deleted");
+    });
+  }
 
-    setApiKeys((prev) => [...prev, newKey]);
-    setKeyName("");
-    setIsDialogOpen(false);
-    setIsCreating(false);
-    toast.success("API key created successfully");
-  };
-
-  const handleCopy = (key: string) => {
-    navigator.clipboard.writeText(key);
-    toast.info("API key copied to clipboard");
-  };
-
-  const handleDelete = (id: string) => {
-    setApiKeys((prev) => prev.filter((k) => k.id !== id));
-    toast.info("API key deleted");
-  };
-
+  const { bot } = useBotData();
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen text-foreground p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="space-y-2 mb-12">
           <h1 className="text-2xl md:text-3xl font-bold text-primary">
@@ -98,59 +57,16 @@ export default function ApiConfig() {
           </p>
         </div>
         {/* Card */}
-        <Card className="bg-card border border-border">
+        <Card className="bg-card border border-border rounded-none">
           <CardHeader className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-cewnter sm:justify-between gap-4">
               <div>
                 <CardTitle>API Key Management</CardTitle>
                 <CardDescription>
                   Create and manage your API keys.
                 </CardDescription>
               </div>
-
-              {/* Create Key Dialog */}
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Create API Key
-                  </Button>
-                </DialogTrigger>
-
-                <DialogContent className="bg-popover border border-border">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                      <Key className="h-5 w-5 text-primary" />
-                      Create New API Key
-                    </DialogTitle>
-                    <DialogDescription>
-                      Enter a label to identify this key.
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <div className="space-y-4 py-4">
-                    <Label htmlFor="keyName">API Key Name</Label>
-                    <Input
-                      id="keyName"
-                      placeholder="e.g. My staging key"
-                      value={keyName}
-                      onChange={(e) => setKeyName(e.target.value)}
-                    />
-                  </div>
-
-                  <DialogFooter>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button onClick={handleCreateApiKey} disabled={isCreating}>
-                      {isCreating ? "Creating…" : "Create API Key"}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <CreateApiKeyDialog />
             </div>
           </CardHeader>
 
@@ -162,9 +78,9 @@ export default function ApiConfig() {
                   <TableHeader>
                     <TableRow className="hover:bg-muted/50">
                       <TableHead>Project #</TableHead>
-                      <TableHead>Project name</TableHead>
-                      <TableHead>API key</TableHead>
-                      <TableHead>Created</TableHead>
+                      <TableHead>Key name</TableHead>
+                      <TableHead>Permissions</TableHead>
+                      <TableHead>Created at</TableHead>
                       <TableHead>Plan</TableHead>
                       <TableHead className="w-20">Actions</TableHead>
                     </TableRow>
@@ -187,37 +103,35 @@ export default function ApiConfig() {
                           className="hover:bg-muted/40 border-border"
                         >
                           <TableCell className="font-mono text-sm">
-                            {k.projectNumber}
+                            ...{k.bot_id.slice(-6)}
                           </TableCell>
-                          <TableCell>{k.projectName}</TableCell>
+                          <TableCell>
+                            {k.name[0].toUpperCase() + bot.name.slice(1)}
+                          </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <code className="bg-muted px-2 py-1 rounded font-mono text-xs">
-                                {k.apiKey.slice(0, 12)}…
+                                {k.permissions?.length
+                                  ? k.permissions.join(", ")
+                                  : "No permissions"}
                               </code>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                                onClick={() => handleCopy(k.apiKey)}
-                              >
-                                <Copy className="h-3 w-3" />
-                              </Button>
                             </div>
                           </TableCell>
-                          <TableCell>{k.created}</TableCell>
+
+                          <TableCell>{formatDate(k.created_at)}</TableCell>
                           <TableCell>
-                            <Badge variant="secondary">{k.plan}</Badge>
+                            <Badge variant="secondary">free</Badge>
                           </TableCell>
                           <TableCell>
                             <Button
                               variant="ghost"
                               size="icon"
+                              disabled={isPending}
                               className={buttonVariants({
                                 variant: "destructive",
                                 size: "icon",
                               })}
-                              onClick={() => handleDelete(k.id)}
+                              onClick={() => handleDeleteClick(k.api_id)}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>

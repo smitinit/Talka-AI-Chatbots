@@ -90,7 +90,7 @@ const Footer = ({
       <div className="absolute inset-0 bg-gradient-to-t from-muted/20 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative">
-        <div className="container mx-auto px-10 pt-16 pb-8">
+        <div className="container mx-auto px-4 pt-8 pb-4">
           {/* Main footer content */}
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             {/* Brand section */}
@@ -171,7 +171,7 @@ const Footer = ({
           </div>
 
           {/* Social links section */}
-          <div className="mt-12 pt-8 border-t border-border/40">
+          <div className="mt-4 pt-4 border-t border-border/40">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium text-muted-foreground">
