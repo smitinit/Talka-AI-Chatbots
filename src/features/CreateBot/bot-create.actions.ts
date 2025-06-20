@@ -3,7 +3,7 @@
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 
-import type { BotType } from "./bot-create.types";
+import type { BotType } from "./bot-create.schema";
 import { botSchema } from "./bot-create.schema";
 import { revalidatePath } from "next/cache";
 

@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Key, Plus } from "lucide-react";
 import { TokenRevealDialog } from "./TokenRevealDialog";
+import { Toggle } from "@/components/ui/toggle";
 
 export default function CreateApiKeyDialog() {
   const { bot } = useBotData();
@@ -137,27 +138,34 @@ export default function CreateApiKeyDialog() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Permissions</FormLabel>
-                    {(["read", "write"] as const).map((scope) => (
-                      <label key={scope} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          // checked={field.value.includes(scope)}
-                          onChange={(e) =>
-                            e.target.checked
-                              ? field.onChange([...field.value, scope])
-                              : field.onChange(
-                                  field.value.filter((v) => v !== scope)
-                                )
-                          }
-                        />
-                        {scope}
-                      </label>
-                    ))}
+                    <div className="flex gap-2 mt-2">
+                      {(["read", "write"] as const).map((perm) => {
+                        const isSelected = field.value.includes(perm);
+
+                        return (
+                          <Toggle
+                            key={perm}
+                            pressed={isSelected}
+                            onPressedChange={(pressed) => {
+                              if (pressed) {
+                                field.onChange([...field.value, perm]);
+                              } else {
+                                field.onChange(
+                                  field.value.filter((v) => v !== perm)
+                                );
+                              }
+                            }}
+                            className="text-sm capitalize"
+                          >
+                            {perm}
+                          </Toggle>
+                        );
+                      })}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <DialogFooter>
                 <Button
                   variant="outline"
