@@ -126,12 +126,15 @@ export default function BotOverviewPage() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight">Bot Overview</h1>
+          <div className="space-y-2 mb-12">
+            <h1 className="text-2xl md:text-3xl font-bold text-primary">
+              Bot Overview
+            </h1>
             <p className="text-muted-foreground">
               Monitor your AI assistant&apos;s performance and health
             </p>
           </div>
+
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
