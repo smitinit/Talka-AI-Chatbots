@@ -5,8 +5,10 @@ export const apiKeySchema = z.object({
   name: z.string().min(2, "Key name must be at least 2 characters"),
   // “read” and “write” are the only scopes for now
   permissions: z
-    .array(z.enum(["read", "write"]))
-    .min(1, "Select at least one permission"),
+    .array(z.string())
+    .refine((value) => value.some((item) => item), {
+      message: "You have to select at least one item.",
+    }),
 });
 
 export type ApiKeyFormType = z.infer<typeof apiKeySchema>;

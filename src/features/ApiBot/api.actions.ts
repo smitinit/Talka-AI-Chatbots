@@ -4,14 +4,13 @@ import { ApiKeyRow, apiKeySchema } from "./api.schema";
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { Result } from "@/types/result";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
-import { revalidatePath } from "next/cache";
 
 export async function createApiKey(
   bot_id: string,
   name: string,
   permissions: string[]
 ): Promise<Result<ApiKeyRow>> {
-  // 1. validate
+  //  validate
   const parsed = apiKeySchema.safeParse({ name, permissions });
   if (!parsed.success) {
     return {
@@ -22,20 +21,26 @@ export async function createApiKey(
 
   const client = createServerSupabaseClient();
 
-  // 2. optional ownership check (kept from your code)
-  const { data: bot } = await client
-    .from("bots")
-    .select("bot_id")
-    .eq("bot_id", bot_id)
-    .maybeSingle();
+  // Get the total number of API keys for this bot/user and if > 3 return.
+  const { count, error: countErr } = await client
+    .from("api_keys")
+    .select("*", { count: "exact", head: true })
+    .eq("bot_id", bot_id);
 
-  if (!bot) return { ok: false, message: "Bot not found or not owned by user" };
-
-  // 3. generate token & hash
+  if (countErr) {
+    return { ok: false, message: supabaseErrorToMessage(countErr!) };
+  }
+  if (count! > 3) {
+    return {
+      ok: false,
+      message: "You can only have a maximum of 3 API keys per bot.",
+    };
+  }
+  //  generate token & hash
   const rawToken = crypto.randomBytes(32).toString("hex"); // shown to user once
   const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
 
-  // 4. insert only the hash
+  //  insert only the hash
   const { data, error } = await client
     .from("api_keys")
     .insert({
@@ -48,12 +53,11 @@ export async function createApiKey(
     .maybeSingle();
 
   if (error) {
-    return { ok: false, message: supabaseErrorToMessage(error) };
+    return { ok: false, message: supabaseErrorToMessage(error!) };
   }
 
-  // 5. trigger revalidation & return raw token once
-  revalidatePath(`/bots/${bot_id}/talka-api`);
-  return { ok: true, data: { ...data, token: rawToken } };
+  // revalidatePath(`/bots/${bot_id}/talka-api`);
+  return { ok: true, data: { ...data, token_hash: rawToken } };
 }
 
 export async function deleteApiKey(api_id: string) {

@@ -21,13 +21,14 @@ import { Key, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import CreateApiKeyDialog from "./CreateApiKeyDialog";
-import { useBotApi, useBotData } from "@/components/bot-context";
+import { useBotApi } from "@/components/bot-context";
 import { formatDate } from "@/lib/utils";
 import { deleteApiKey } from "./api.actions";
 import { useTransition } from "react";
 
 export default function ApiConfig() {
   const { api: apiKeys, setApi } = useBotApi();
+
   const [isPending, startTransition] = useTransition();
 
   function handleDeleteClick(api_id: string) {
@@ -44,7 +45,6 @@ export default function ApiConfig() {
     });
   }
 
-  const { bot } = useBotData();
   return (
     <div className="min-h-screen text-foreground p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
@@ -66,7 +66,12 @@ export default function ApiConfig() {
                   Create and manage your API keys.
                 </CardDescription>
               </div>
-              <CreateApiKeyDialog />
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="w-fit h-full">
+                  {apiKeys.length} / 3 keys
+                </Badge>
+                <CreateApiKeyDialog />
+              </div>
             </div>
           </CardHeader>
 
@@ -106,7 +111,7 @@ export default function ApiConfig() {
                             ...{k.bot_id.slice(-6)}
                           </TableCell>
                           <TableCell>
-                            {k.name[0].toUpperCase() + bot.name.slice(1)}
+                            {k.name[0].toUpperCase() + k.name.slice(1)}
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">

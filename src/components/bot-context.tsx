@@ -45,10 +45,7 @@ export function BotProvider({
   const [bot, setBot] = useState(initials.bot);
   const [configs, setConfigs] = useState(initials.botConfigs);
   const [settings, setSettings] = useState(initials.botSettings);
-  const [api, setApi] = useState<ApiKeyRow[]>(
-    Array.isArray(initials.api) ? initials.api : []
-  );
-
+  const [api, setApi] = useState<ApiKeyRow[]>(initials.api);
   const values = useMemo<BotContextType>(
     () => ({
       bot,

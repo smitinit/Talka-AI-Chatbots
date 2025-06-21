@@ -119,8 +119,6 @@ export default function BotSettingsForm() {
         "Are you sure you want to regenerate API keys? Existing keys will be invalidated."
       )
     ) {
-      // Regenerate keys logic
-      console.log("Regenerating keys...");
     }
   }
 
