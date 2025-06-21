@@ -70,7 +70,9 @@ function ErrorState({ message }: { message?: string }) {
 }
 
 export default async function BotManagementDashboard() {
-  await new Promise((res) => setTimeout(res, 500));
+  await new Promise((res) => {
+    setTimeout(res, 500);
+  });
 
   const bots = await getBots();
   return (

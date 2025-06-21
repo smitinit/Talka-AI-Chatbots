@@ -125,6 +125,7 @@ const Footer = ({
                     type="email"
                     placeholder="Enter your email"
                     className="flex-1 h-9 text-sm"
+                    autoFocus={false}
                   />
                   <Button size="sm" className="shrink-0">
                     Subscribe
