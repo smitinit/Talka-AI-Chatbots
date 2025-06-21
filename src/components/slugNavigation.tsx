@@ -40,16 +40,16 @@ export default function BotSidebarLayout({
       icon: <LayoutDashboard className="h-4 w-4" />,
     },
     {
-      id: "configure",
-      title: "Configuration",
-      href: `/bots/${slug}/configure`,
-      icon: <SlidersHorizontal className="h-4 w-4" />,
-    },
-    {
       id: "api",
       title: "API Access",
       href: `/bots/${slug}/talka-api`,
       icon: <Code className="h-4 w-4" />,
+    },
+    {
+      id: "configure",
+      title: "Configuration",
+      href: `/bots/${slug}/configure`,
+      icon: <SlidersHorizontal className="h-4 w-4" />,
     },
     {
       id: "settings",
