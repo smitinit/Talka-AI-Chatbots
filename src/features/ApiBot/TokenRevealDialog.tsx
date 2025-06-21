@@ -30,7 +30,7 @@ export function TokenRevealDialog({ token, open, onClose }: TokenRevealProps) {
           <DialogTitle className="text-lg font-semibold">
             API Key Created
           </DialogTitle>
-          <DialogDescription className="text-sm text-yellow-700 dark:text-yellow-200 items-center justify-center flex gap-3">
+          <DialogDescription className="text-sm text-yellow-700 dark:text-yellow-200 items-center justify-between flex gap-3">
             <AlertTriangleIcon className="h-8 w-8" />
             <span>
               This is your only chance to copy the API key. Store it securely —

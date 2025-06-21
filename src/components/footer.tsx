@@ -85,7 +85,7 @@ const Footer = ({
   ],
 }: FooterProps) => {
   return (
-    <footer className="relative border-t border-border/40 bg-background">
+    <footer className="relative border-t border-border/40 bg-background z-50">
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-muted/20 via-transparent to-transparent pointer-events-none" />
 
