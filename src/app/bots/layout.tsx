@@ -1,10 +1,12 @@
+import type { Metadata } from "next";
 import { ReactNode } from "react";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Talka Dashboard",
   description:
-    "Talka Dashboard for managing ai powered personalized chat bots.",
+    "Manage all your AI-powered personalized chatbots from one dashboard.",
 };
+
 export default function BotsLayout({
   children,
   modal,

@@ -2,29 +2,44 @@ import { BotProvider, type FullBotType } from "@/components/bot-context";
 import BotSidebarLayout from "@/components/slugNavigation";
 import { Toaster } from "@/components/ui/sonner";
 import { createServerSupabaseClient } from "@/db/supabase/client";
-import { ReactNode } from "react";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Talka AI-Chatbots",
-  description: "Talka Dashboard for managing AI-powered personalized chatbots.",
-};
-
 interface BotsLayoutProps {
-  children: ReactNode;
-  modal: ReactNode;
-  params: Promise<{ slug: string }>;
+  children: React.ReactNode;
+  modal: React.ReactNode;
+  params: { slug: string };
 }
+
+export async function generateMetadata({
+  params,
+}: BotsLayoutProps): Promise<Metadata> {
+  const client = createServerSupabaseClient();
+  const { data: bot } = await client
+    .from("bots")
+    .select("name")
+    .eq("bot_id", params.slug)
+    .maybeSingle();
+
+  return {
+    title: bot
+      ? `${bot.name[0].toUpperCase() + bot.name.slice(1)} · Talka`
+      : "Bot · Talka",
+    description: bot
+      ? `Dashboard and configuration for ${bot.name}.`
+      : "AI chatbot dashboard",
+  };
+}
+
+/* ------------------------------------------------------ */
 
 export default async function BotsLayout({
   children,
   modal,
   params,
 }: BotsLayoutProps) {
-  const { slug: bot_id } = await params;
-  if (!bot_id) throw new Error("Invalid bot id");
-
+  const bot_id = params.slug;
   const client = createServerSupabaseClient();
 
   const [botRes, cfgRes, setRes, apiRes] = await Promise.all([
@@ -56,6 +71,7 @@ export default async function BotsLayout({
     botSettings: setRes.data,
     api: apiRes.data || [],
   };
+
   return (
     <BotProvider initials={fullBotData}>
       {modal}

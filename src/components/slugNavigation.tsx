@@ -135,7 +135,7 @@ export default function BotSidebarLayout({
       <div className="flex">
         {/* Sidebar */}
         <div
-          className={`fixed left-0 top-16 h-full z-40 transition-all duration-150 ease-out border border-border/50 bg-background/95 backdrop-blur-sm ${
+          className={`fixed left-0 top-16 h-full z-40 transition-all duration-150 ease-out border-r border-border bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 ${
             isHovered ? "w-72" : "w-20"
           }`}
           onMouseEnter={() => setIsHovered(true)}
@@ -144,7 +144,7 @@ export default function BotSidebarLayout({
           <div className="">
             <div className="p-4">
               {/* Header - Only bot logo centered */}
-              <div className="mb-8 ">
+              <div className="mb-8 border-b border-border ">
                 <div
                   className={`flex items-center gap-3 mb-4 ${
                     !isHovered ? " ml-2 justify-start" : ""
@@ -160,8 +160,8 @@ export default function BotSidebarLayout({
                         : "opacity-0 -translate-x-2 max-w-0 overflow-hidden"
                     }`}
                   >
-                    <h2 className="text-lg font-bold text-foreground truncate whitespace-nowrap">
-                      {configs.name}
+                    <h2 className="text-xl font-mono text-foreground truncate whitespace-nowrap">
+                      {configs.name[0].toUpperCase() + configs.name.slice(1)}
                     </h2>
                     <p className="text-sm text-muted-foreground whitespace-nowrap">
                       Manage your AI assistant
