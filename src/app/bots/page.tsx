@@ -1,8 +1,8 @@
 export const dynamic = "force-dynamic";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, BotIcon, AlertCircle } from "lucide-react";
+import { Plus, BotIcon } from "lucide-react";
 import Link from "next/link";
 import { getBots } from "@/features/CreateBot/bot-create.actions";
 import BotCard from "@/features/CreateBot/BotDisplayCard";
@@ -45,36 +45,13 @@ function EmptyState() {
   );
 }
 
-function ErrorState({ message }: { message?: string }) {
-  return (
-    <div className="col-span-full">
-      <Card className="border-destructive/20 bg-destructive/5">
-        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="bg-destructive/10 mb-6 flex h-20 w-20 items-center justify-center rounded-full">
-            <AlertCircle className="text-destructive h-10 w-10" />
-          </div>
-          <h3 className="text-2xl font-semibold text-destructive mb-2">
-            Failed to load bots
-          </h3>
-          <p className="text-muted-foreground mb-8 max-w-md leading-relaxed">
-            {message ||
-              "There was an error loading your bots. Please try refreshing the page."}
-          </p>
-          <Button variant="outline" onClick={() => window.location.reload()}>
-            Try Again
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
 export default async function BotManagementDashboard() {
-  await new Promise((res) => {
-    setTimeout(res, 500);
-  });
-
   const bots = await getBots();
+  if (!bots.ok) {
+    throw new Error(
+      `Failed to fetch bots: ${bots.message || "Something went wrong"}`
+    );
+  }
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-7xl p-6">
@@ -140,14 +117,10 @@ export default async function BotManagementDashboard() {
 
         {/* Bots Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {bots.ok ? (
-            bots.data!.length > 0 ? (
-              bots.data!.map((bot) => <BotCard key={bot.bot_id} bot={bot} />)
-            ) : (
-              <EmptyState />
-            )
+          {bots.ok && bots.data!.length > 0 ? (
+            bots.data!.map((bot) => <BotCard key={bot.bot_id} bot={bot} />)
           ) : (
-            <ErrorState message={bots.message} />
+            <EmptyState />
           )}
         </div>
       </div>
