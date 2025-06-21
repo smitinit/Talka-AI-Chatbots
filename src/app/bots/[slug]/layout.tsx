@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 interface BotsLayoutProps {
   children: React.ReactNode;
   modal: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { data: bot } = await client
     .from("bots")
     .select("name")
-    .eq("bot_id", params.slug)
+    .eq("bot_id", (await params).slug)
     .maybeSingle();
 
   return {
@@ -39,7 +39,7 @@ export default async function BotsLayout({
   modal,
   params,
 }: BotsLayoutProps) {
-  const bot_id = params.slug;
+  const bot_id = (await params).slug;
   const client = createServerSupabaseClient();
 
   const [botRes, cfgRes, setRes, apiRes] = await Promise.all([

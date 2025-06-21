@@ -25,23 +25,24 @@ export const metadata: Metadata = {
   description:
     "Talka is a personalized multi-tenant powerhouse for AI-driven chatbots.",
   icons: { icon: "/favicon.ico" },
-  themeColor: "#ffffff",
-  viewport: "width=device-width, initial-scale=1",
+  // themeColor: "#ffffff",
+  // viewport: "width=device-width, initial-scale=1",
   openGraph: {
     title: "Talka · AI Chatbots",
     description:
       "Create, configure and manage AI-powered chatbots in one place.",
-    url: "https://talka.ai",
+    // url: "https://talka.ai",
     siteName: "Talka",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Talka" }],
+    // images: [{ url: "/og.png", width: 1200, height: 630, alt: "Talka" }],
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Talka · AI Chatbots",
     description:
       "Create, configure and manage AI-powered chatbots in one place.",
-    images: ["/og.png"],
+    // images: ["/og.png"],
   },
   robots: { follow: true, index: true },
 };

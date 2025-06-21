@@ -97,7 +97,7 @@ export default function CreateApiKeyDialog() {
         setApi((prev) => [...prev, newKey]);
       }
 
-      form.reset({ name: "" }); // clear input for next time
+      form.reset({ name: "", permissions: ["read"] }); // clear input for next time
       setOpen(false);
 
       toast.success("API key created successfully");
@@ -170,7 +170,7 @@ export default function CreateApiKeyDialog() {
                             >
                               <FormControl>
                                 <Checkbox
-                                  checked={field.value?.includes(item.id)}
+                                  checked={field.value.includes(item.id)}
                                   onCheckedChange={(checked) => {
                                     const current = Array.isArray(field.value)
                                       ? field.value
