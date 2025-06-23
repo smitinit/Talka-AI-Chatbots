@@ -30,7 +30,6 @@ export default function ApiConfig() {
   const { api: apiKeys, setApi } = useBotApi();
 
   const [isPending, startTransition] = useTransition();
-
   function handleDeleteClick(api_id: string) {
     startTransition(async () => {
       const result = await deleteApiKey(api_id);

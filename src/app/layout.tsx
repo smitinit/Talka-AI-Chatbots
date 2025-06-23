@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
 import Script from "next/script";
+import ChatbotPreview from "@/components/chatbot/chatbot-preview";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,6 +72,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navbar />
             {children}
+            <ChatbotPreview />
             <Footer />
           </ThemeProvider>
         </ClerkProvider>

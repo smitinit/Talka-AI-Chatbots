@@ -56,15 +56,15 @@ const Footer = ({
         { text: "API", url: "/#-docs" },
       ],
     },
-    {
-      title: "Company",
-      links: [
-        { text: "About Us", url: "/#" },
-        { text: "Careers", url: "/#" },
-        { text: "Blog", url: "/#" },
-        { text: "Contact", url: "/#" },
-      ],
-    },
+    // {
+    //   title: "Company",
+    //   links: [
+    //     { text: "About Us", url: "/#" },
+    //     { text: "Careers", url: "/#" },
+    //     { text: "Blog", url: "/#" },
+    //     { text: "Contact", url: "/#" },
+    //   ],
+    // },
     {
       title: "Resources",
       links: [
