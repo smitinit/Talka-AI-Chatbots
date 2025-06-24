@@ -6,18 +6,16 @@ import { cn } from "@/lib/utils";
 
 const routes = [
   "configure",
-  "editor",
   "settings",
-  "preview",
   "talka-api",
   "danger",
+  // "editor",
+  // "preview",
 ];
 
 const routeLabels: Record<string, string> = {
   configure: "Configure",
-  editor: "Editor",
   "talka-api": "Api / Connect",
-  preview: "Preview",
   settings: "Settings",
   danger: "Danger Zone",
 };
@@ -36,7 +34,7 @@ export function TabsNavigation({ slug }: { slug: string }) {
     >
       <TabsList
         className={cn(
-          "inline-flex items-center rounded-xl bg-muted px-1 py-1 ",
+          "inline-flex items-center rounded-xl bg-muted px-2 py-1 ",
           "space-x-1"
         )}
       >

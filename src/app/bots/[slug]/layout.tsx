@@ -1,7 +1,7 @@
 import type React from "react";
 import { BotProvider, type FullBotType } from "@/components/bot-context";
-import BotManagementDashboard from "@/components/botAnalytics";
-import { TabsNavigation } from "@/components/tabNavigation";
+import BotManagementDashboard from "@/components/bot-analytics";
+import { TabsNavigation } from "@/components/tab-navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import type { Metadata } from "next";
