@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import CreateApiKeyDialog from "./CreateApiKeyDialog";
 import { useBotApi } from "@/components/bot-context";
 import { formatDate } from "@/lib/utils";
-import { deleteApiKey } from "./api.actions";
+import { deleteApiKey } from "./apiActions";
 import { useTransition } from "react";
 
 export default function ApiConfig() {
@@ -45,7 +45,7 @@ export default function ApiConfig() {
   }
 
   return (
-    <div className="min-h-screen text-foreground p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen text-foreground ">
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="space-y-2 mb-12">
           <h1 className="text-2xl md:text-3xl font-bold text-primary">

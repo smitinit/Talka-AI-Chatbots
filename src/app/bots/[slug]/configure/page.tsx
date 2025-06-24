@@ -1,4 +1,4 @@
-import BotConfigsForm from "@/features/ConfigureBot/ConfigureForm";
+import BotConfigsForm from "@/features/config/configForm";
 
 export default async function Configure() {
   return (

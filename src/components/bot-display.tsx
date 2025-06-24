@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import type { BotType } from "./bot-create.schema";
+import type { BotType } from "../features/create/createSchema";
 
 import { BotIcon, Calendar, Clock, ExternalLink, Settings } from "lucide-react";
 import {

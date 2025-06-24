@@ -159,7 +159,7 @@ export default function Navbar() {
               size="sm"
               className="hidden sm:flex"
             >
-              <Link href="/bots">Dashboard</Link>
+              <Link href="/bots">Your all Bots</Link>
             </Button>
             <SignedOut>
               <div className="hidden sm:flex items-center space-x-2">

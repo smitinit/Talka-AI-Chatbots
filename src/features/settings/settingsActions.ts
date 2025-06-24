@@ -2,9 +2,8 @@
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 import { Result } from "@/types/result";
-import { botSettingsSchema, type BotSettingsType } from "./bot-setting.schema";
+import { botSettingsSchema, type BotSettingsType } from "./settingsSchema";
 import { redirect } from "next/navigation";
-
 
 export async function handleBotSettingsUpdate(
   botId: string,

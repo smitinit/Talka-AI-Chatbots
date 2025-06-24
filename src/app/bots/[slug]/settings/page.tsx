@@ -1,4 +1,4 @@
-import SettingForm from "@/features/SettingBot/SettingsForm";
+import SettingForm from "@/features/settings/settingsForm";
 
 export default async function Settings() {
   return (

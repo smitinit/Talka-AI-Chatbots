@@ -4,8 +4,8 @@ import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, BotIcon } from "lucide-react";
 import Link from "next/link";
-import { getBots } from "@/features/CreateBot/bot-create.actions";
-import BotCard from "@/features/CreateBot/BotDisplayCard";
+import { getBots } from "@/features/create/createActions";
+import BotCard from "@/components/bot-display";
 import { Badge } from "@/components/ui/badge";
 
 function EmptyState() {

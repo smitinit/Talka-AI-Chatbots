@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { apiKeySchema, ApiKeyFormType, ApiKeyRow } from "./api.schema";
-import { createApiKey } from "./api.actions";
+import { apiKeySchema, ApiKeyFormType, ApiKeyRow } from "./apiSchema";
+import { createApiKey } from "./apiActions";
 import { toast } from "sonner";
 import { useBotApi, useBotData } from "@/components/bot-context";
 

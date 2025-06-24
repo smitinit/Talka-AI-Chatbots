@@ -2,7 +2,7 @@
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 import { Result } from "@/types/result";
-import { botConfigSchema, BotConfigType } from "./bot-config.schema";
+import { botConfigSchema, BotConfigType } from "./configSchema";
 
 export async function handleBotConfigUpdate(
   botId: string,

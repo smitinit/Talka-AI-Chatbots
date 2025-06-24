@@ -3,8 +3,8 @@
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 
-import type { BotType } from "./bot-create.schema";
-import { botSchema } from "./bot-create.schema";
+import type { BotType } from "./createSchema";
+import { botSchema } from "./createSchema";
 import { revalidatePath } from "next/cache";
 
 import type { PostgrestError } from "@supabase/supabase-js";

@@ -1,12 +1,12 @@
 "use server";
 
 import crypto from "node:crypto";
-import { ApiKeyRow, apiKeySchema } from "./api.schema";
+import { ApiKeyRow, apiKeySchema } from "./apiSchema";
 import { createServerSupabaseClient } from "@/db/supabase/client";
 import { Result } from "@/types/result";
 import { supabaseErrorToMessage } from "@/db/supabase/errorMap";
 import { sha256 } from "js-sha256";
-import { generateApiMeshToken } from "./meshtoken-gen";
+import { generateApiMeshToken } from "../../lib/meshtoken-gen";
 import { auth } from "@clerk/nextjs/server";
 import { deleteCachedApiKey } from "@/lib/cache";
 

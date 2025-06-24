@@ -29,8 +29,8 @@ import SectionHeader from "@/components/section-header";
 import { toast } from "sonner";
 
 import { useBotConfigs, useBotData } from "@/components/bot-context";
-import { botConfigSchema, type BotConfigType } from "./bot-config.schema";
-import { handleBotConfigUpdate } from "./bot-config.action";
+import { botConfigSchema, type BotConfigType } from "./configSchema";
+import { handleBotConfigUpdate } from "./configActions";
 
 export default function BotConfigForm() {
   const { configs, setConfigs } = useBotConfigs();
@@ -101,7 +101,7 @@ export default function BotConfigForm() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto mb-8 py-10 px-4">
+    <div className="max-w-full mx-auto  ">
       <div className="space-y-2 mb-12">
         <h1 className="text-2xl md:text-3xl font-bold text-primary">
           Bot Configuration
@@ -121,93 +121,56 @@ export default function BotConfigForm() {
               subtitle="Define your bot's core identity and basic characteristics."
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="name">Bot Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="name"
-                        placeholder="Enter bot name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="default_language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="default-language-select">
+                    Default Language
+                  </FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger id="default-language-select">
+                        <SelectValue placeholder="Select default language" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="hi">Hindi</SelectItem>
+                        <SelectItem value="fr">French</SelectItem>
+                        <SelectItem value="de">German</SelectItem>
+                        <SelectItem value="es">Spanish</SelectItem>
+                        <SelectItem value="zh">Chinese</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="gender">Gender</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger id="gender">
-                          <SelectValue placeholder="Select gender" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="neutral">Neutral</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="avatar"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="avatar">Avatar URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="avatar"
-                        placeholder="https://example.com/avatar.jpg"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Optional: URL to bot&apos;s avatar image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="voice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="voice">Voice</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="voice"
-                        placeholder="Voice identifier"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Optional: Voice configuration for TTS
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="target_audience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="target-audience">
+                    Target Audience
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      id="target-audience"
+                      placeholder="Describe your bot's target audience (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {/* Personality & Character */}
@@ -294,6 +257,80 @@ export default function BotConfigForm() {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="persona_tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="persona-tags">Persona Tags</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="persona-tags"
+                      placeholder="Comma separated tags (optional)"
+                      value={
+                        Array.isArray(field.value) ? field.value.join(", ") : ""
+                      }
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value
+                            .split(",")
+                            .map((tag) => tag.trim())
+                            .filter(Boolean)
+                        )
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Add tags to describe persona traits (e.g. helpful, witty,
+                    patient)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="do_dont"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="do-dont">
+                    Do&apos;s & Don&apos;ts
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="do-dont"
+                      placeholder="List any specific do's and don'ts for your bot (optional)"
+                      className="min-h-[60px] resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="preferred_examples"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="preferred-examples">
+                    Preferred Examples
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      id="preferred-examples"
+                      placeholder="Provide example responses or behaviors (optional)"
+                      className="min-h-[60px] resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <FormField
@@ -384,26 +421,6 @@ export default function BotConfigForm() {
                 )}
               />
             </div>
-
-            <FormField
-              control={form.control}
-              name="knowledge_scope"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="knowledge-scope">
-                    Knowledge Scope
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="knowledge-scope"
-                      placeholder="Define knowledge boundaries and focus areas"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           {/* Language & Communication */}
@@ -419,15 +436,15 @@ export default function BotConfigForm() {
                 name="language_preference"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor="default-language">
-                      Default Language
+                    <FormLabel htmlFor="language-preference">
+                      Language Preference
                     </FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger id="default-language">
+                        <SelectTrigger id="language-preference">
                           <SelectValue placeholder="Select language" />
                         </SelectTrigger>
                         <SelectContent>
@@ -445,7 +462,25 @@ export default function BotConfigForm() {
                 )}
               />
 
-              <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="output_format"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="output-format">Output Format</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="output-format"
+                        placeholder="e.g. Markdown, Plain text, HTML (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-4 md:col-span-2">
                 <FormField
                   control={form.control}
                   name="use_emojis"
@@ -495,52 +530,6 @@ export default function BotConfigForm() {
                 />
               </div>
             </div>
-          </div>
-
-          {/* Greetings & Default Responses */}
-          <div className="space-y-6">
-            <SectionHeader
-              title="Greetings & Default Responses"
-              subtitle="Set up how your bot introduces itself and handles unknown queries."
-            />
-
-            <FormField
-              control={form.control}
-              name="greeting"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="greet">Greeting Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      id="greet"
-                      placeholder="How should your bot introduce itself?"
-                      className="min-h-[80px] resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="fallback"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="fallback">Fallback Response</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      id="fallback"
-                      placeholder="What should your bot say when it doesn't know the answer?"
-                      className="min-h-[80px] resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           {/* Expertise & Knowledge Domain */}
@@ -598,141 +587,6 @@ export default function BotConfigForm() {
                   )}
                 />
               )}
-            </div>
-          </div>
-
-          {/* Safety & Content Moderation */}
-          <div className="space-y-6">
-            <SectionHeader
-              title="Safety & Content Moderation"
-              subtitle="Configure safety settings and content filtering options."
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="content_filter_level"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="filter">Content Filter Level</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger id="filter">
-                          <SelectValue placeholder="Select filter level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="low">Low</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="custom_moderation"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between pt-2">
-                    <div className="space-y-0.5">
-                      <FormLabel htmlFor="moderation">
-                        Custom Moderation
-                      </FormLabel>
-                      <FormDescription>
-                        Enable custom moderation rules
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        id="moderation"
-                        aria-label="include custom moderation"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          {/* Memory & Data Retention */}
-          <div className="space-y-6">
-            <SectionHeader
-              title="Memory & Data Retention"
-              subtitle="Control how your bot remembers and retains conversation data."
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="memory_type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="memory">Memory Type</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger id="memory">
-                          <SelectValue placeholder="Select memory type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="per-user">Per User</SelectItem>
-                          <SelectItem value="global">Global</SelectItem>
-                          <SelectItem value="session-only">
-                            Session Only
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      Fundamental to data-retention policy
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="memory_expiration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="memory-expiration">
-                      Memory Expiration
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger id="memory-expiration">
-                          <SelectValue placeholder="Select duration" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="session">Session Only</SelectItem>
-                          <SelectItem value="24h">24 Hours</SelectItem>
-                          <SelectItem value="7d">7 Days</SelectItem>
-                          <SelectItem value="30d">30 Days</SelectItem>
-                          <SelectItem value="perm">Permanent</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      Changing later can be destructive
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
           </div>
 
