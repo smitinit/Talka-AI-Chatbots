@@ -13,8 +13,11 @@ export const botRuntimeSettingsSchema = z.object({
   voice_mode: z.boolean(),
   logging_enabled: z.boolean(),
   use_web_search: z.boolean(),
-  webhook_url: z.string().url().optional().or(z.literal("")),
-  site_url: z.string().url().optional().or(z.literal("")),
+
+  site_url: z.string().url().or(z.literal("")),
+
+  webhook_url: z.string().url().or(z.literal("")),
+
   rate_limit_per_min: z.coerce.number().min(1).max(1000),
 });
 

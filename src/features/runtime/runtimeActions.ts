@@ -1,3 +1,4 @@
+"use server";
 import { Result } from "@/types/result";
 import {
   botRuntimeSettingsSchema,

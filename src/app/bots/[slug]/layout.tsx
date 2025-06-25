@@ -94,19 +94,20 @@ export default async function BotsLayout({
   };
 
   return (
-    <div className="min-h-screen bg-background w-full">
+    <div className="min-h-screen bg-background max-w-[90rem] mx-auto">
       <BotProvider initials={fullBotData}>
         <div className="flex min-h-screen">
           {/* Sidebar */}
           <BotManagementDashboard />
 
           {/* Main Content */}
-          <div className="flex-1 flex-col w-full p-6 space-y-6">
-            <TabsNavigation slug={bot_id} />
-
-            <main className="flex-1 p-6">
-              <div className="max-w-7xl mx-auto">{children}</div>
-            </main>
+          <div className="flex-1   space-y-6 ">
+            <div className="flex flex-col  ">
+              <TabsNavigation slug={bot_id} />
+              <main className="flex-1 p-6">
+                <div className="max-w-7xl mx-auto">{children}</div>
+              </main>
+            </div>
           </div>
         </div>
 

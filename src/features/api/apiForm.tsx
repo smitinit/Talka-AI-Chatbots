@@ -39,7 +39,7 @@ export default function ApiConfig() {
   }
 
   return (
-    <div className="mx-auto max-w-full space-y-6">
+    <div className="mx-auto max-w-4xl px-6 py-8">
       <div className="space-y-2 mb-12">
         <h1 className="text-2xl md:text-3xl font-bold text-primary">
           API Integration
@@ -48,6 +48,7 @@ export default function ApiConfig() {
           Configure your AI bot&apos;s api api keys.
         </p>
       </div>
+
       {/* Card */}
       <div className="w-full">
         <header className="space-y-4">

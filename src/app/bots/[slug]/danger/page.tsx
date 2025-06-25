@@ -41,7 +41,7 @@ export default function Danger() {
     }
   }
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-4xl px-6 py-8">
       <div className="space-y-2 mb-12">
         <h1 className="text-2xl md:text-3xl font-bold text-destructive">
           Bot Settings
