@@ -33,7 +33,7 @@ const lru =
   global.__global_lru_cache__ ??
   new LRUCache<string, CacheValue>({
     max: 1000,
-    ttl: 1000 * 60 * 5, // 5 minutes
+    ttl: 0, // 10 seconds
   });
 
 if (!global.__global_lru_cache__) {

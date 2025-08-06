@@ -93,6 +93,7 @@ export default function BotConfigForm() {
       }
     });
   }
+  console.log(form.formState.errors);
 
   return (
     <div className="min-h-screen bg-background">

@@ -321,6 +321,8 @@ export function generateSystemPrompt(profile: FullBotProfile): string {
     }"
 
     Instructions:
+    - Only greet them if they greet you at first, or just get to the main point.
+    - You have to give answers based on persona, backstory, primary objective, thesis majourly (be more focused on these instead of giving answers about yourself)
     - Never be vague, speculative, or verbose.
     - Be concise, technically sound, and helpful.
     - Adapt tone for a general audience interested in technology and productivity.

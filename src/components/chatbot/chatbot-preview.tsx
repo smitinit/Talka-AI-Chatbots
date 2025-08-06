@@ -11,8 +11,8 @@ export default function ChatbotPreview() {
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6  flex flex-col items-end z-[12341234]">
       {isOpen && (
-        <div className="absolute bottom-full mb-3 w-[calc(100vw-2rem)] sm:w-80 md:w-96 lg:w-[400px] h-[calc(100vh-6rem)] sm:h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
-          <ChatInterface botId="3b0cbb33-1d69-4446-9a1e-a3496235fe62" />
+        <div className="absolute bottom-full mb-3 w-[calc(100vw-2rem)] sm:w-80 md:w-[96] lg:w-[450px] h-[calc(100vh-6rem)] sm:h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+          <ChatInterface botId="986dc3db-f76c-48d0-87dc-8fa53bce57f0" />
         </div>
       )}
       <Button
