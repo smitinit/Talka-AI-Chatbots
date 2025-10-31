@@ -54,8 +54,8 @@ export default function BotForm() {
 
   const isLoading = isSubmitting || isPending;
   return (
-    <div className="flex justify-center p-4 ">
-      <Card className="w-full max-w-md border-none shadow-none">
+    <div className="flex justify-center items-center p-4">
+      <Card className="border-none shadow-none p-0 w-full max-w-4xl">
         <CardHeader className="text-center pb-6">
           <CardTitle className="text-2xl font-semibold">
             Create New Bot

@@ -6,8 +6,15 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import { cn } from "@/lib/utils";
 
-export function Modal({ children }: { children: React.ReactNode }) {
+export function Modal({
+  children,
+  classname,
+}: {
+  children: React.ReactNode;
+  classname?: string;
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(true);
 
@@ -20,7 +27,9 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="bg-card rounded-xl p-0 border-none shadow-none ">
+      <DialogContent
+        className={cn("bg-card rounded-xl border-none shadow-none ", classname)}
+      >
         <VisuallyHidden>
           <DialogTitle>Create Bot Modal</DialogTitle>
           <DialogDescription>

@@ -38,7 +38,7 @@ export async function generateMetadata({
 
 export default async function BotsLayout({
   children,
-  // modal,
+  modal,
   params,
 }: BotsLayoutProps) {
   const bot_id = (await params).slug;
@@ -94,25 +94,27 @@ export default async function BotsLayout({
   };
 
   return (
-    <div className="min-h-screen bg-background max-w-[90rem] mx-auto">
-      <BotProvider initials={fullBotData}>
-        <div className="flex min-h-screen">
-          {/* Sidebar */}
-          <BotManagementDashboard />
+    <>
+      <div className=" bg-background max-w-[90rem] mx-auto">
+        <BotProvider initials={fullBotData}>
+          <div className="flex">
+            {/* Sidebar */}
+            <BotManagementDashboard bot={botRes.data} />
 
-          {/* Main Content */}
-          <div className="flex-1   space-y-6 ">
-            <div className="flex flex-col  ">
-              <TabsNavigation slug={bot_id} />
-              <main className="flex-1 p-6">
-                <div className="max-w-7xl mx-auto">{children}</div>
-              </main>
+            {/* Main Content */}
+            <div className="flex-1 space-y-6 ">
+              <div className="flex flex-col  ">
+                <TabsNavigation slug={bot_id} />
+                <main className="flex-1 p-2">
+                  <div className="max-w-7xl mx-auto">{children}</div>
+                </main>
+              </div>
             </div>
           </div>
-        </div>
-
-        <Toaster position="top-right" duration={2000} closeButton />
-      </BotProvider>
-    </div>
+          <Toaster position="top-right" duration={2000} closeButton />
+        </BotProvider>
+        {modal}
+      </div>
+    </>
   );
 }

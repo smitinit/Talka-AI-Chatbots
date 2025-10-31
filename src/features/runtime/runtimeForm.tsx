@@ -100,37 +100,33 @@ export default function BotRun() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="space-y-2 mb-12">
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
-            Bot Runtime Settings
-          </h1>
-          <p className="text-muted-foreground">
+        <div className="space-y-1 mb-8">
+          <h1 className="text-3xl font-bold text-primary">Bot Settings</h1>
+          <p className="text-sm text-muted-foreground">
             Manage runtime settings, operational controls, and day-to-day bot
             operations.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Basic Settings Grid */}
-            <div className="grid gap-8 md:grid-cols-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+            <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="greeting"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Greeting
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Welcome to our bot!"
-                        className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-xs text-muted-foreground">
                       The initial message users will see when they start a
                       conversation.
                     </FormDescription>
@@ -143,7 +139,7 @@ export default function BotRun() {
                 control={form.control}
                 name="status"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Status
                     </FormLabel>
@@ -152,7 +148,7 @@ export default function BotRun() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                        <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                         <SelectContent>
@@ -162,7 +158,7 @@ export default function BotRun() {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-xs text-muted-foreground">
                       Current operational status of the bot.
                     </FormDescription>
                     <FormMessage />
@@ -171,12 +167,11 @@ export default function BotRun() {
               />
             </div>
 
-            {/* Fallback Message */}
             <FormField
               control={form.control}
               name="fallback"
               render={({ field }) => (
-                <FormItem className="space-y-3">
+                <FormItem className="space-y-2">
                   <FormLabel className="text-sm font-medium text-foreground">
                     Fallback Message
                   </FormLabel>
@@ -187,7 +182,7 @@ export default function BotRun() {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-sm text-muted-foreground">
+                  <FormDescription className="text-xs text-muted-foreground">
                     Message shown when the bot cannot answer a question.
                   </FormDescription>
                   <FormMessage />
@@ -195,13 +190,12 @@ export default function BotRun() {
               )}
             />
 
-            {/* Configuration Grid */}
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <FormField
                 control={form.control}
                 name="billing_plan"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Billing Plan
                     </FormLabel>
@@ -210,7 +204,7 @@ export default function BotRun() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                        <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                           <SelectValue placeholder="Select plan" />
                         </SelectTrigger>
                         <SelectContent>
@@ -220,7 +214,7 @@ export default function BotRun() {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-xs text-muted-foreground">
                       Select the billing plan for this bot.
                     </FormDescription>
                     <FormMessage />
@@ -232,7 +226,7 @@ export default function BotRun() {
                 control={form.control}
                 name="memory_type"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Memory Type
                     </FormLabel>
@@ -241,7 +235,7 @@ export default function BotRun() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                        <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                           <SelectValue placeholder="Select memory type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -253,7 +247,7 @@ export default function BotRun() {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-xs text-muted-foreground">
                       How the bot stores and manages conversation memory.
                     </FormDescription>
                     <FormMessage />
@@ -265,7 +259,7 @@ export default function BotRun() {
                 control={form.control}
                 name="memory_expiration"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-medium text-foreground">
                       Memory Expiration
                     </FormLabel>
@@ -274,7 +268,7 @@ export default function BotRun() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                        <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                           <SelectValue placeholder="Select expiration" />
                         </SelectTrigger>
                         <SelectContent>
@@ -286,7 +280,7 @@ export default function BotRun() {
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-xs text-muted-foreground">
                       How long the bot should remember conversations.
                     </FormDescription>
                     <FormMessage />
@@ -295,28 +289,27 @@ export default function BotRun() {
               />
             </div>
 
-            {/* Voice & Media Settings */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            <div className="space-y-6 pt-6 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground">
                 Voice & Media Settings
               </h3>
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <FormField
                   control={form.control}
                   name="avatar"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Avatar URL
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://example.com/avatar.png"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Optional. URL to the bot&apos;s avatar image.
                       </FormDescription>
                       <FormMessage />
@@ -328,18 +321,18 @@ export default function BotRun() {
                   control={form.control}
                   name="voice"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Voice Model
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="en-US-Wavenet-D"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Optional. Specify the voice model for TTS.
                       </FormDescription>
                       <FormMessage />
@@ -351,7 +344,7 @@ export default function BotRun() {
                   control={form.control}
                   name="gender"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Voice Gender
                       </FormLabel>
@@ -360,7 +353,7 @@ export default function BotRun() {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                             <SelectValue placeholder="Select gender" />
                           </SelectTrigger>
                           <SelectContent>
@@ -370,7 +363,7 @@ export default function BotRun() {
                           </SelectContent>
                         </Select>
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Gender for the bot&apos;s voice.
                       </FormDescription>
                       <FormMessage />
@@ -380,28 +373,27 @@ export default function BotRun() {
               </div>
             </div>
 
-            {/* Integration Settings */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            <div className="space-y-6 pt-6 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground">
                 Integration Settings
               </h3>
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="webhook_url"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Webhook URL
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://example.com/webhook"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Optional. URL to send webhook events.
                       </FormDescription>
                       <FormMessage />
@@ -413,18 +405,18 @@ export default function BotRun() {
                   control={form.control}
                   name="site_url"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Site URL
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://example.com"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Optional. The website associated with this bot.
                       </FormDescription>
                       <FormMessage />
@@ -436,7 +428,7 @@ export default function BotRun() {
                   control={form.control}
                   name="rate_limit_per_min"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Rate Limit (per minute)
                       </FormLabel>
@@ -446,7 +438,7 @@ export default function BotRun() {
                           min={1}
                           max={1000}
                           placeholder="60"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                           value={field.value ?? ""}
                           onChange={(e) =>
@@ -454,7 +446,7 @@ export default function BotRun() {
                           }
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Maximum number of requests allowed per minute (1-1000).
                       </FormDescription>
                       <FormMessage />
@@ -464,22 +456,21 @@ export default function BotRun() {
               </div>
             </div>
 
-            {/* Feature Toggles */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+            <div className="space-y-6 pt-6 border-t border-border">
+              <h3 className="text-lg font-semibold text-foreground">
                 Feature Settings
               </h3>
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="voice_mode"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Voice Mode
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Enable or disable voice responses.
                         </FormDescription>
                       </div>
@@ -498,12 +489,12 @@ export default function BotRun() {
                   control={form.control}
                   name="logging_enabled"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Logging Enabled
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Store chat logs for this bot.
                         </FormDescription>
                       </div>
@@ -522,12 +513,12 @@ export default function BotRun() {
                   control={form.control}
                   name="use_web_search"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Use Web Search
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Allow the bot to use web search for answers.
                         </FormDescription>
                       </div>
@@ -544,12 +535,11 @@ export default function BotRun() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-end pt-8 border-t border-border">
               <Button
                 type="submit"
                 size="lg"
-                className="px-8 h-11 font-medium"
+                className="px-8 h-10 font-medium"
                 disabled={isPendingUpdate || !isDirty || isSubmitting}
               >
                 {isSubmitting ? "Saving..." : "Save Settings"}

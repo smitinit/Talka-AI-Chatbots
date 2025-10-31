@@ -1,5 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default function BotRoot({ params }: { params: { slug: string } }) {
-  redirect(`/bots/${params.slug}/configure`);
+export default async function BotRoot({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  redirect(`/bots/${slug}/configure`);
 }

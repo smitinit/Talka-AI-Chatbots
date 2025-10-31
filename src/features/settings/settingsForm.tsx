@@ -90,35 +90,33 @@ export default function BotSettingsForm() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="space-y-2 mb-12">
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
-            Bot Settings
+        <div className="space-y-1 mb-8">
+          <h1 className="text-3xl font-bold text-primary">
+            Advance Bot Settings
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Configure AI model parameters and response behavior settings.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* AI Model Parameters */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
             <div className="space-y-6">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   AI Model Parameters
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Configure your bot&apos;s behavior and response generation.
                 </p>
               </div>
 
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <FormField
                   control={form.control}
                   name="max_tokens"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Max Tokens
                       </FormLabel>
@@ -128,11 +126,11 @@ export default function BotSettingsForm() {
                           placeholder="e.g. 1000"
                           min={100}
                           max={4000}
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Maximum number of tokens the bot can generate in a
                         single response.
                       </FormDescription>
@@ -145,7 +143,7 @@ export default function BotSettingsForm() {
                   control={form.control}
                   name="top_p"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Top P
                       </FormLabel>
@@ -156,11 +154,11 @@ export default function BotSettingsForm() {
                           step={0.01}
                           min={0}
                           max={1}
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Controls diversity via nucleus sampling.
                       </FormDescription>
                       <FormMessage />
@@ -172,7 +170,7 @@ export default function BotSettingsForm() {
                   control={form.control}
                   name="temperature"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Temperature
                       </FormLabel>
@@ -183,11 +181,11 @@ export default function BotSettingsForm() {
                           step={0.01}
                           min={0}
                           max={2}
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Controls randomness in responses.
                       </FormDescription>
                       <FormMessage />
@@ -197,23 +195,22 @@ export default function BotSettingsForm() {
               </div>
             </div>
 
-            {/* Advanced Settings */}
-            <div className="space-y-6">
+            <div className="space-y-6 pt-6 border-t border-border">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   Advanced Settings
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Fine-tune response generation and output formatting.
                 </p>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <FormField
                   control={form.control}
                   name="stop_sequences"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Stop Sequences
                       </FormLabel>
@@ -225,7 +222,7 @@ export default function BotSettingsForm() {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Specify sequences that will stop the generation.
                       </FormDescription>
                       <FormMessage />
@@ -237,7 +234,7 @@ export default function BotSettingsForm() {
                   control={form.control}
                   name="focus_domains"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Focus Domains
                       </FormLabel>
@@ -249,7 +246,7 @@ export default function BotSettingsForm() {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Specify domains to focus the bot&apos;s responses on.
                       </FormDescription>
                       <FormMessage />
@@ -261,12 +258,12 @@ export default function BotSettingsForm() {
                   control={form.control}
                   name="json_mode"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           JSON Mode
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Enable JSON output format for responses.
                         </FormDescription>
                       </div>
@@ -283,12 +280,11 @@ export default function BotSettingsForm() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-end pt-8 border-t border-border">
               <Button
                 type="submit"
                 size="lg"
-                className="px-8 h-11 font-medium"
+                className="px-8 h-10 font-medium"
                 disabled={isPendingUpdate || !isDirty || isSubmitting}
               >
                 {isSubmitting ? "Saving..." : "Save Settings"}

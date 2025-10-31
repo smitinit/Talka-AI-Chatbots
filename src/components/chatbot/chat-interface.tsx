@@ -44,7 +44,7 @@ ChatInterfaceProps) {
   console.log(messages);
   // const [isConnected, setIsConnected] = useState(false);
   // const [isConnecting, setIsConnecting] = useState(false);
-  const [activeTab, setActiveTab] = useState("messages");
+  const [activeTab] = useState("messages");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {

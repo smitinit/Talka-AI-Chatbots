@@ -1,3 +1,9 @@
+import PreviewLayoutForm from "@/features/preview/previewFormLayout";
+
 export default function Preview() {
-  return <>Preview Page</>;
+  return (
+    <section>
+      <PreviewLayoutForm />
+    </section>
+  );
 }

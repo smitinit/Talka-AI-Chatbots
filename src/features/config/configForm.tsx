@@ -96,39 +96,36 @@ export default function BotConfigForm() {
   console.log(form.formState.errors);
 
   return (
+ 
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="space-y-2 mb-12">
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
-            Bot Configuration
-          </h1>
-          <p className="text-muted-foreground">
+        <div className="space-y-1 mb-8">
+          <h1 className="text-3xl font-bold text-primary">Bot Configuration</h1>
+          <p className="text-sm text-muted-foreground">
             Configure your AI bot&apos;s core identity, personality, and
             design-time settings.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
-            {/* Identity & Basic Information */}
-            <div className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+            <div className="space-y-6">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   Identity & Basic Information
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Define your bot&apos;s core identity and basic
                   characteristics.
                 </p>
               </div>
 
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="default_language"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Default Language
                       </FormLabel>
@@ -137,7 +134,7 @@ export default function BotConfigForm() {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                             <SelectValue placeholder="Select default language" />
                           </SelectTrigger>
                           <SelectContent>
@@ -159,14 +156,14 @@ export default function BotConfigForm() {
                   control={form.control}
                   name="target_audience"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Target Audience
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Describe your bot's target audience (optional)"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
@@ -177,31 +174,30 @@ export default function BotConfigForm() {
               </div>
             </div>
 
-            {/* Personality & Character */}
-            <div className="space-y-8">
+            <div className="space-y-6 pt-6 border-t border-border">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   Personality & Character
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Shape your bot&apos;s personality, backstory, and core
                   characteristics.
                 </p>
               </div>
 
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <FormField
                   control={form.control}
                   name="persona"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Persona
                       </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe your bot's personality and character traits..."
-                          className="min-h-[120px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                          className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
                           {...field}
                         />
                       </FormControl>
@@ -214,14 +210,14 @@ export default function BotConfigForm() {
                   control={form.control}
                   name="botthesis"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Bot Mission & Thesis
                       </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="What's your bot's purpose, goal, or philosophy?"
-                          className="min-h-[120px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                          className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
                           {...field}
                         />
                       </FormControl>
@@ -230,12 +226,12 @@ export default function BotConfigForm() {
                   )}
                 />
 
-                <div className="grid gap-8 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="backstory"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Backstory
                         </FormLabel>
@@ -255,7 +251,7 @@ export default function BotConfigForm() {
                     control={form.control}
                     name="goals"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Goals
                         </FormLabel>
@@ -276,14 +272,14 @@ export default function BotConfigForm() {
                   control={form.control}
                   name="persona_tags"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Persona Tags
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Comma separated tags (optional)"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                           onChange={(e) => {
                             const tags = e.target.value
@@ -294,7 +290,7 @@ export default function BotConfigForm() {
                           }}
                         />
                       </FormControl>
-                      <FormDescription className="text-sm text-muted-foreground">
+                      <FormDescription className="text-xs text-muted-foreground">
                         Add tags to describe persona traits (e.g. helpful,
                         witty, patient)
                       </FormDescription>
@@ -303,12 +299,12 @@ export default function BotConfigForm() {
                   )}
                 />
 
-                <div className="grid gap-8 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="do_dont"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Do&apos;s & Don&apos;ts
                         </FormLabel>
@@ -328,7 +324,7 @@ export default function BotConfigForm() {
                     control={form.control}
                     name="preferred_examples"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Preferred Examples
                         </FormLabel>
@@ -345,12 +341,12 @@ export default function BotConfigForm() {
                   />
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-3">
+                <div className="grid gap-6 md:grid-cols-3">
                   <FormField
                     control={form.control}
                     name="tone_style"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Tone Style
                         </FormLabel>
@@ -359,7 +355,7 @@ export default function BotConfigForm() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                               <SelectValue placeholder="Select tone style" />
                             </SelectTrigger>
                             <SelectContent>
@@ -382,7 +378,7 @@ export default function BotConfigForm() {
                     control={form.control}
                     name="writing_style"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Writing Style
                         </FormLabel>
@@ -391,7 +387,7 @@ export default function BotConfigForm() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                               <SelectValue placeholder="Select writing style" />
                             </SelectTrigger>
                             <SelectContent>
@@ -417,7 +413,7 @@ export default function BotConfigForm() {
                     control={form.control}
                     name="response_style"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Response Style
                         </FormLabel>
@@ -426,7 +422,7 @@ export default function BotConfigForm() {
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                               <SelectValue placeholder="Select response style" />
                             </SelectTrigger>
                             <SelectContent>
@@ -447,23 +443,22 @@ export default function BotConfigForm() {
               </div>
             </div>
 
-            {/* Language & Communication */}
-            <div className="space-y-8">
+            <div className="space-y-6 pt-6 border-t border-border">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   Language & Communication
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Configure language preferences and communication style.
                 </p>
               </div>
 
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="language_preference"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Language Preference
                       </FormLabel>
@@ -472,7 +467,7 @@ export default function BotConfigForm() {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                             <SelectValue placeholder="Select language" />
                           </SelectTrigger>
                           <SelectContent>
@@ -494,14 +489,14 @@ export default function BotConfigForm() {
                   control={form.control}
                   name="output_format"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Output Format
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g. Markdown, Plain text, HTML (optional)"
-                          className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
@@ -511,17 +506,17 @@ export default function BotConfigForm() {
                 />
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="use_emojis"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Use Emojis
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Allow bot to use emojis in responses
                         </FormDescription>
                       </div>
@@ -539,12 +534,12 @@ export default function BotConfigForm() {
                   control={form.control}
                   name="include_citations"
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50">
+                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
                       <div className="space-y-1">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Include Citations
                         </FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-xs text-muted-foreground">
                           Add source citations to responses
                         </FormDescription>
                       </div>
@@ -560,23 +555,22 @@ export default function BotConfigForm() {
               </div>
             </div>
 
-            {/* Expertise & Knowledge Domain */}
-            <div className="space-y-8">
+            <div className="space-y-6 pt-6 border-t border-border">
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg font-semibold text-foreground">
                   Expertise & Knowledge Domain
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Define your bot&apos;s area of expertise and knowledge focus.
                 </p>
               </div>
 
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="expertise"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
                         Expertise Area
                       </FormLabel>
@@ -585,7 +579,7 @@ export default function BotConfigForm() {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
                             <SelectValue placeholder="Select expertise" />
                           </SelectTrigger>
                           <SelectContent>
@@ -609,14 +603,14 @@ export default function BotConfigForm() {
                     control={form.control}
                     name="customexpertise"
                     render={({ field }) => (
-                      <FormItem className="space-y-3">
+                      <FormItem className="space-y-2">
                         <FormLabel className="text-sm font-medium text-foreground">
                           Custom Expertise
                         </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Describe your custom expertise area"
-                            className="h-11 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                            className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                             {...field}
                           />
                         </FormControl>
@@ -628,12 +622,11 @@ export default function BotConfigForm() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-end pt-8 border-t border-border">
               <Button
                 type="submit"
                 size="lg"
-                className="px-8 h-11 font-medium"
+                className="px-8 h-10 font-medium"
                 disabled={isPending || !isDirty || isSubmitting}
               >
                 {isSubmitting ? "Saving..." : "Save Configuration"}
