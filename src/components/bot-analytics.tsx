@@ -26,7 +26,7 @@ const mockStats = {
   uptime: 99.97,
   memoryUsage: 68,
   tokensUsed: 45230,
-  tokensLimit: 100000,
+  tokensLimit: 1000000,
 };
 
 export default function BotManagementDashboard({ bot }: { bot: BotType }) {

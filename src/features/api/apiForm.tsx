@@ -1,7 +1,5 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-
 import {
   Table,
   TableBody,
@@ -11,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Key, Trash2 } from "lucide-react";
+import { Check, Key, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import CreateApiKeyDialog from "./CreateApiKeyDialog";
@@ -19,6 +17,8 @@ import { useBotApi } from "@/components/bot-context";
 import { formatDate } from "@/lib/utils";
 import { deleteApiKey } from "./apiActions";
 import { useTransition } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { ConfirmActionDialog } from "@/components/ConfirmDialog";
 
 export default function ApiConfig() {
   const { api: apiKeys, setApi } = useBotApi();
@@ -38,6 +38,7 @@ export default function ApiConfig() {
     });
   }
 
+  const isConnected = false;
   return (
     <div className="w-full mx-auto max-w-4xl px-6 py-8">
       <div className="space-y-1 mb-8">
@@ -72,13 +73,13 @@ export default function ApiConfig() {
                     Key name
                   </TableHead>
                   <TableHead className="h-12 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Permissions
+                    Environment
                   </TableHead>
                   <TableHead className="h-12 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     Created at
                   </TableHead>
                   <TableHead className="h-12 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Plan
+                    Integrated
                   </TableHead>
                   <TableHead className="h-12 w-20 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     Actions
@@ -111,7 +112,7 @@ export default function ApiConfig() {
                       key={k.id}
                       className="border-b border-border/30 hover:bg-muted/30 transition-colors duration-200"
                     >
-                      <TableCell className="font-mono text-xs text-muted-foreground py-4">
+                      <TableCell className="font-mono text-xs text-muted-foreground py-4 ">
                         ...{k.bot_id.slice(-6)}
                       </TableCell>
                       <TableCell className="text-sm font-medium text-foreground py-4">
@@ -131,13 +132,14 @@ export default function ApiConfig() {
                       <TableCell className="py-4">
                         <Badge
                           variant="secondary"
-                          className="text-xs font-medium"
+                          className="text-xs font-medium flex justify-center items-center gap-2 "
                         >
-                          free
+                          {isConnected ? <Check /> : <Spinner />}
+                          {isConnected ? "Connected" : "Pending"}
                         </Badge>
                       </TableCell>
                       <TableCell className="py-4">
-                        <Button
+                        {/* <Button
                           variant="ghost"
                           size="icon"
                           disabled={isPending}
@@ -148,7 +150,17 @@ export default function ApiConfig() {
                           onClick={() => handleDeleteClick(k.api_id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                        </Button> */}
+                        <ConfirmActionDialog
+                          icon={<Trash2 className="h-3.5 w-3.5" />}
+                          title="Are you sure you want to delete this API key?"
+                          description="This action cannot be undone."
+                          actionLabel="Yes, delete it"
+                          triggerLabel=""
+                          onConfirm={() => handleDeleteClick(k.api_id)}
+                          variant="destructive"
+                          disabled={isPending}
+                        />
                       </TableCell>
                     </TableRow>
                   ))

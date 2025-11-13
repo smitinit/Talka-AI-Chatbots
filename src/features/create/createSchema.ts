@@ -3,11 +3,11 @@ import { z } from "zod";
 export const botSchema = z.object({
   name: z
     .string()
-    .min(6, "Bot's name should atleast contain 6 characters!")
+    .min(1, "Bot's name is required!")
     .max(15, "Bot's name can not be more than 10 characters!"),
   description: z
     .string()
-    .min(10, "Bot's description is required!")
+    .min(1, "Bot's description is required!")
     .max(200, "Bot's description can not be more than 200 words"),
 });
 

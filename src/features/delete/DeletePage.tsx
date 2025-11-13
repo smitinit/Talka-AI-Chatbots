@@ -1,7 +1,7 @@
 "use client";
 
 import { useBotData } from "@/components/bot-context";
-import { Button } from "@/components/ui/button";
+
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { deleteBot } from "./deleteAction";
 import { AlertTriangle, Power, PowerOff, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { ConfirmActionDialog } from "../../components/ConfirmDialog";
 
 export default function DangerSectionPage() {
   const [isPendingDelete, startDeleteTransition] = useTransition();
@@ -33,10 +34,8 @@ export default function DangerSectionPage() {
   }
 
   const [isOnline, setOnline] = useState(false);
-  function handleBotStatusChange() {
-    if (confirm("Are you sure you want to change the bot status?")) {
-      setOnline(!isOnline);
-    }
+  function handleStatusChange() {
+    setOnline(!isOnline);
   }
   return (
     <div className="mx-auto max-w-4xl px-6 py-8">
@@ -69,20 +68,23 @@ export default function DangerSectionPage() {
                 them.
               </p>
             </div>
-            <Button
-              type="button"
-              variant={isOnline ? "destructive" : "outline"}
-              onClick={handleBotStatusChange}
-              className="flex items-center gap-2 ml-4 shrink-0"
-              size="sm"
-            >
-              {isOnline ? (
-                <PowerOff className="h-4 w-4" />
-              ) : (
-                <Power className="h-4 w-4" />
-              )}
-              {isOnline ? "Switch Off" : "Switch On"}
-            </Button>
+
+            <ConfirmActionDialog
+              title={isOnline ? "Deactivate Bot" : "Activate Bot"}
+              description="Are you sure you want to change the status of this bot? This might affect active integrations."
+              triggerLabel={isOnline ? "Switch Off" : "Switch On"}
+              icon={
+                isOnline ? (
+                  <PowerOff className="h-4 w-4" />
+                ) : (
+                  <Power className="h-4 w-4" />
+                )
+              }
+              variant={isOnline ? "destructive" : "default"}
+              actionLabel="Yes, Change"
+              onConfirm={handleStatusChange}
+              isDestructive={isOnline}
+            />
           </div>
 
           <div className="flex items-center justify-between p-4 border border-destructive/30 rounded-lg bg-destructive/5 hover:bg-destructive/10 transition-colors duration-200">
@@ -94,17 +96,17 @@ export default function DangerSectionPage() {
                 Permanently delete this bot and all associated data.
               </p>
             </div>
-            <Button
-              type="button"
+            <ConfirmActionDialog
+              title="Are you sure to delete this bot?"
+              description="This action is irreversible. All data associated with this bot will be permanently deleted."
+              triggerLabel="Delete Bot"
+              icon={<Trash2 className="h-4 w-4" />}
+              actionLabel="Yes, Delete"
               variant="destructive"
-              onClick={handleDeleteBot}
-              className="flex items-center gap-2 ml-4 shrink-0"
-              size="sm"
+              onConfirm={handleDeleteBot}
               disabled={isPendingDelete}
-            >
-              <Trash2 className="h-4 w-4" />
-              Delete Bot
-            </Button>
+              isDestructive={true}
+            />
           </div>
         </CardContent>
       </Card>

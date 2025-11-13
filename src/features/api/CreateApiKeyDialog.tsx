@@ -30,16 +30,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Key, Plus } from "lucide-react";
 import { TokenRevealDialog } from "./TokenRevealDialog";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
 
 const permissions = [
   {
-    id: "read",
-    label: "Read",
+    id: "prod",
+    label: "Production",
   },
   {
-    id: "write",
-    label: "Write",
+    id: "dev",
+    label: "Development",
   },
 ];
 
@@ -56,7 +56,7 @@ export default function CreateApiKeyDialog() {
 
   const form = useForm<ApiKeyFormType>({
     resolver: zodResolver(apiKeySchema),
-    defaultValues: { name: "", permissions: ["read"] },
+    defaultValues: { name: "", permissions: ["dev"] },
   });
   const { isDirty, isSubmitting } = form.formState;
 
@@ -97,7 +97,7 @@ export default function CreateApiKeyDialog() {
         setApi((prev) => [...prev, newKey]);
       }
 
-      form.reset({ name: "", permissions: ["read"] }); // clear input for next time
+      form.reset({ name: "", permissions: ["dev"] }); // clear input for next time
       setOpen(false);
 
       toast.success("API key created successfully");
@@ -136,7 +136,7 @@ export default function CreateApiKeyDialog() {
                       <Input
                         autoComplete="off"
                         id="keyName"
-                        placeholder="e.g. staging key, prod, dev, etc."
+                        placeholder="e.g. staging key, testing key etc."
                         {...field}
                       />
                     </FormControl>
@@ -151,46 +151,42 @@ export default function CreateApiKeyDialog() {
                 render={() => (
                   <FormItem>
                     <div className="mb-4">
-                      <FormLabel className="text-base">Permissions</FormLabel>
+                      <FormLabel className="text-base">
+                        Environment Instance
+                      </FormLabel>
                       <FormDescription>
-                        Select permission/s that you want to assign to this
-                        apikey.
+                        Select the environment this API key will have access to.
                       </FormDescription>
                     </div>
-                    {permissions.map((item) => (
-                      <FormField
-                        key={item.id}
-                        control={form.control}
-                        name="permissions"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={item.id}
-                              className="flex flex-row items-center gap-2"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value.includes(item.id)}
-                                  onCheckedChange={(checked) => {
-                                    const current = Array.isArray(field.value)
-                                      ? field.value
-                                      : [];
-                                    field.onChange(
-                                      checked
-                                        ? [...current, item.id]
-                                        : current.filter((v) => v !== item.id)
-                                    );
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="text-sm font-normal">
-                                {item.label}
-                              </FormLabel>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    ))}
+                    <div className="space-y-2">
+                      {permissions.map((item) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="permissions"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-center gap-2"
+                              >
+                                <FormControl>
+                                  <input
+                                    type="radio"
+                                    className="form-radio"
+                                    checked={field.value[0] === item.id}
+                                    onChange={() => field.onChange([item.id])}
+                                  />
+                                </FormControl>
+                                <FormLabel className="text-sm font-normal">
+                                  {item.label}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -207,7 +203,7 @@ export default function CreateApiKeyDialog() {
                   type="submit"
                   disabled={isSubmitting || !isDirty || isPending}
                 >
-                  {isSubmitting || isPending ? "Creating…" : "Create API Key"}
+                  {isSubmitting || isPending ? <Spinner /> : "Create API Key"}
                 </Button>
               </DialogFooter>
             </form>

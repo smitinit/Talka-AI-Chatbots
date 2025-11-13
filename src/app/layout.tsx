@@ -7,7 +7,6 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
 import Script from "next/script";
-import ChatbotPreview from "@/components/chatbot/chatbot-preview";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +47,7 @@ export const metadata: Metadata = {
   robots: { follow: true, index: true },
 };
 
+import Chatbot from "@/packages/chatbot-ui/src/Chatbot";
 export default function RootLayout({
   children,
 }: {
@@ -65,14 +65,23 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <link
+          href="https://fonts.cdnfonts.com/css/getvoip-grotesque"
+          rel="stylesheet"
+        />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="antialiased">
         <ClerkProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navbar />
+            <Chatbot
+              botId="8bc77785-43dc-4607-b69f-431c7950b235"
+              position="bottom-right"
+              theme="blue"
+            />
             {children}
-            <ChatbotPreview />
+
             <Footer />
           </ThemeProvider>
         </ClerkProvider>

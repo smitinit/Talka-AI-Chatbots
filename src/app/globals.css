@@ -195,6 +195,9 @@
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+  .font-getvoip {
+    font-family: "GetVoIP Grotesque", sans-serif;
+  }
 }
 
 /* Smooth scrolling optimization */

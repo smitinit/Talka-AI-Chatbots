@@ -1,9 +1,9 @@
-import SettingForm from "@/features/settings/settingsForm";
+import BotRun from "@/features/runtime/runtimeForm";
 
 export default async function Settings() {
   return (
     <>
-      <SettingForm />
+      <BotRun />
     </>
   );
 }

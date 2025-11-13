@@ -35,7 +35,7 @@ import { AlertTriangleIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
-import ChatInterface from "@/components/chatbot/chat-interface";
+import { Chatbot } from "@/packages/chatbot-ui/src";
 
 export default function PreviewLayoutForm() {
   const router = useRouter();
@@ -108,7 +108,7 @@ export default function PreviewLayoutForm() {
         </CardHeader>
       </VisuallyHidden>
 
-      <CardContent className="flex flex-row h-[80vh] p-0 gap-0">
+      <CardContent className="flex flex-row h-[90vh] p-0 gap-0">
         <div className="basis-1/2  flex flex-col">
           <div className="overflow-y-auto px-4 py-4">
             <Form {...form}>
@@ -444,9 +444,13 @@ export default function PreviewLayoutForm() {
             </Button>
           </div>
         </div>
-        <div className="basis-1/2 border-l border-border bg-card items-center justify-center flex">
-          <div className="w-[80%] border border-border rounded-lg overflow-hidden">
-            <ChatInterface />
+        <div className="basis-1/2 border-l border-border bg-card items-center justify-center flex relative">
+          <div className="w-[80%]  rounded-lg overflow-hidden relative">
+            <Chatbot
+              position="bottom-right"
+              botId="8bc77785-43dc-4607-b69f-431c7950b235"
+              theme="blue"
+            />
           </div>
         </div>
       </CardContent>

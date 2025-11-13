@@ -111,7 +111,7 @@ export default async function BotsLayout({
               </div>
             </div>
           </div>
-          <Toaster position="top-right" duration={2000} closeButton />
+          <Toaster position="bottom-right" duration={2000} closeButton />
         </BotProvider>
         {modal}
       </div>

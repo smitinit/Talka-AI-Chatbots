@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangleIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function BotForm() {
   const router = useRouter();
@@ -110,7 +111,7 @@ export default function BotForm() {
 
             <div className="flex flex-col gap-3 pt-2">
               <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? "Creating..." : "Create Bot"}
+                {isLoading ? <Spinner /> : "Create Bot"}
               </Button>
 
               <Button

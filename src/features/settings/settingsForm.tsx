@@ -1,10 +1,9 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,13 +15,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 
 import { botSettingsSchema, type BotSettingsType } from "./settingsSchema";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useBotData, useBotSettings } from "@/components/bot-context";
 import { handleBotSettingsUpdate } from "./settingsActions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import SaveTriggerUI from "@/components/SaveTriggerUI";
 
 export default function BotSettingsForm() {
   const { settings, setSettings } = useBotSettings();
@@ -32,7 +38,7 @@ export default function BotSettingsForm() {
 
   // initialize the form and the validator
   const form = useForm<BotSettingsType>({
-    resolver: zodResolver(botSettingsSchema),
+    resolver: zodResolver(botSettingsSchema) as Resolver<BotSettingsType>,
     defaultValues: fetchedSettings,
   });
 
@@ -41,7 +47,7 @@ export default function BotSettingsForm() {
     if (settings) form.reset(settings);
   }, [settings, form]);
 
-  // form states isDirty -> checks the existing settings with current and isSubmitting -> persistive loader
+  // form states isDirty -> checks the existing settings with current and isSubmitting -> persisting loader
   const { isDirty, isSubmitting } = form.formState;
 
   // warn user if there is any changes and he is closing the site
@@ -92,47 +98,39 @@ export default function BotSettingsForm() {
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="space-y-1 mb-8">
           <h1 className="text-3xl font-bold text-primary">
-            Advance Bot Settings
+            Runtime Bot Settings
           </h1>
           <p className="text-sm text-muted-foreground">
-            Configure AI model parameters and response behavior settings.
+            Configure your bot&apos;s business information, product details, and
+            operational settings.
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold text-foreground">
-                  AI Model Parameters
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Configure your bot&apos;s behavior and response generation.
-                </p>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+            {/* Business Information Section */}
+            <div className="space-y-6 pb-8 border-b border-border">
+              <h3 className="text-lg font-semibold text-foreground">
+                Business Information
+              </h3>
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="max_tokens"
+                  name="business_name"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Max Tokens
+                        Business Name *
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="e.g. 1000"
-                          min={100}
-                          max={4000}
+                          placeholder="Your company name"
                           className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
                       <FormDescription className="text-xs text-muted-foreground">
-                        Maximum number of tokens the bot can generate in a
-                        single response.
+                        The name of your business.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -141,89 +139,75 @@ export default function BotSettingsForm() {
 
                 <FormField
                   control={form.control}
-                  name="top_p"
+                  name="business_type"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Top P
+                        Business Type *
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="e.g. 0.9"
-                          step={0.01}
-                          min={0}
-                          max={1}
+                          placeholder="e.g., SaaS, E-commerce, Agency"
                           className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
                       <FormDescription className="text-xs text-muted-foreground">
-                        Controls diversity via nucleus sampling.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="temperature"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Temperature
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="e.g. 0.7"
-                          step={0.01}
-                          min={0}
-                          max={2}
-                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription className="text-xs text-muted-foreground">
-                        Controls randomness in responses.
+                        Category or type of your business.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="business_description"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Business Description
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your business and what it does..."
+                        className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      A brief overview of your business operations and services.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <div className="space-y-6 pt-6 border-t border-border">
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold text-foreground">
-                  Advanced Settings
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Fine-tune response generation and output formatting.
-                </p>
-              </div>
-
-              <div className="space-y-6">
+            {/* Product Information Section */}
+            <div className="space-y-6 pb-8 border-b border-border">
+              <h3 className="text-lg font-semibold text-foreground">
+                Product Information
+              </h3>
+              <div className="grid gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="stop_sequences"
+                  name="product_name"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Stop Sequences
+                        Product Name *
                       </FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="e.g. 'END', 'STOP'"
-                          rows={3}
-                          className="bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        <Input
+                          placeholder="Your product name"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
                       <FormDescription className="text-xs text-muted-foreground">
-                        Specify sequences that will stop the generation.
+                        The name of your main product or service.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -232,67 +216,251 @@ export default function BotSettingsForm() {
 
                 <FormField
                   control={form.control}
-                  name="focus_domains"
+                  name="targeted_audience"
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Focus Domains
+                        Targeted Audience
                       </FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="e.g. 'healthcare', 'finance'"
-                          rows={3}
-                          className="bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        <Input
+                          placeholder="e.g., Small businesses, Enterprises"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
                         />
                       </FormControl>
                       <FormDescription className="text-xs text-muted-foreground">
-                        Specify domains to focus the bot&apos;s responses on.
+                        Who your product is designed for.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                <FormField
-                  control={form.control}
-                  name="json_mode"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
-                      <div className="space-y-1">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          JSON Mode
-                        </FormLabel>
-                        <FormDescription className="text-xs text-muted-foreground">
-                          Enable JSON output format for responses.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
+
+              <FormField
+                control={form.control}
+                name="product_description"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Product Description
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your product features and benefits..."
+                        className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      Detailed description of your product and its capabilities.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <div className="flex justify-end pt-8 border-t border-border">
+            {/* Strategic Information Section */}
+            <div className="space-y-6 pb-8 border-b border-border">
+              <h3 className="text-lg font-semibold text-foreground">
+                Strategic Information
+              </h3>
+              <FormField
+                control={form.control}
+                name="mission"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Mission
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="What is your mission or purpose?"
+                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      Your company&apos;s mission statement.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="thesis"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Thesis
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="What is your core business thesis or philosophy?"
+                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      Your fundamental belief or principle.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="goals"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Goals
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="What are your short and long-term goals?"
+                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      Your business objectives and targets.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Contact & Configuration Section */}
+            <div className="space-y-6 pb-8 border-b border-border">
+              <h3 className="text-lg font-semibold text-foreground">
+                Contact & Configuration
+              </h3>
+              <div className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="support_email"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Support Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="support@example.com"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs text-muted-foreground">
+                        Email address for customer support inquiries.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="contacts"
+                  render={({ field }) => (
+                    <FormItem className="space-y-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Contacts
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Contact information (phone, address, etc.)"
+                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs text-muted-foreground">
+                        Additional contact details.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="supported_languages"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Supported Languages *
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => {
+                          const currentLanguages = field.value || ["en"];
+                          if (currentLanguages.includes(value)) {
+                            field.onChange(
+                              currentLanguages.filter((lang) => lang !== value)
+                            );
+                          } else {
+                            field.onChange([...currentLanguages, value]);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
+                          <SelectValue placeholder="Select languages" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="en">English</SelectItem>
+                          <SelectItem value="es">Spanish</SelectItem>
+                          <SelectItem value="fr">French</SelectItem>
+                          <SelectItem value="de">German</SelectItem>
+                          <SelectItem value="it">Italian</SelectItem>
+                          <SelectItem value="pt">Portuguese</SelectItem>
+                          <SelectItem value="ja">Japanese</SelectItem>
+                          <SelectItem value="zh">Chinese</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <div className="text-xs text-muted-foreground">
+                      Selected: {field.value?.join(", ") || "None"}
+                    </div>
+                    <FormDescription className="text-xs text-muted-foreground">
+                      Languages your bot will support (minimum one required).
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Submit Button */}
+            {/* <div className="flex justify-end pt-4">
               <Button
                 type="submit"
                 size="lg"
                 className="px-8 h-10 font-medium"
-                disabled={isPendingUpdate || !isDirty || isSubmitting}
+                disabled={isSubmitting || isPendingUpdate || !isDirty}
               >
                 {isSubmitting ? "Saving..." : "Save Settings"}
               </Button>
-            </div>
+            </div> */}
           </form>
         </Form>
       </div>
+      <SaveTriggerUI
+        isDirty={isDirty}
+        isSubmitting={isSubmitting}
+        isPendingUpdate={isPendingUpdate}
+        onSave={() => form.handleSubmit(onSubmit)()}
+        phrase="Runtime Settings"
+      />
     </div>
   );
 }

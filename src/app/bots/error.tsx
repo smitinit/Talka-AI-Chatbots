@@ -7,10 +7,9 @@ import { AlertTriangle } from "lucide-react";
 
 interface ErrorProps {
   error: Error & { digest?: string };
-  reset: () => void;
 }
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function Error({ error }: ErrorProps) {
   useEffect(() => {
     console.error("App Error:", error);
   }, [error]);
@@ -41,11 +40,6 @@ export default function Error({ error, reset }: ErrorProps) {
       )}
 
       <div className="mt-6 flex gap-4">
-        <form action={() => reset()}>
-          <Button variant="default" type="submit">
-            Retry
-          </Button>
-        </form>
         <Link href="/" passHref>
           <Button variant="outline">Go to Home</Button>
         </Link>

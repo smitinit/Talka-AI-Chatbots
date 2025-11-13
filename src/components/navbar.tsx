@@ -11,8 +11,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { Menu, X, Bot, Home, Settings, FileText, Sparkles } from "lucide-react";
-
+import { Menu, X, Bot, Home, Settings, FileText } from "lucide-react";
+import Logo from "../app/assets/ChatGPT Image Nov 6, 2025, 02_51_42 PM.png";
+import Image from "next/image";
 const navigationItems = [
   {
     title: "Dashboard",
@@ -49,14 +50,16 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 z-10 group">
-            <div className="relative">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors duration-200">
-                <Sparkles className="h-4 w-4 text-primary" />
-              </div>
-            </div>
-            <span className="text-lg font-semibold text-foreground">
-              Talka AI-Chatbots
-            </span>
+            <Image
+              src={Logo.src}
+              alt="Quick Bots Logo"
+              className="object-contain"
+              width={48}
+              height={48}
+            />
+            <h1 className="font-getvoip text-lg font-bold text-foreground tracking-wide">
+              QUICK BOTS
+            </h1>
           </Link>
 
           {/* Right side actions */}
