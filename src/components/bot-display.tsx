@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 
-import type { BotType } from "../features/create/createSchema";
+import type { BotType } from "@/types";
 
-import { BotIcon, Calendar, Clock, ExternalLink, Settings } from "lucide-react";
+import { BotIcon, Calendar, Clock, Settings } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -46,7 +46,6 @@ export default function BotCard({ bot }: { bot: BotType }) {
               </div>
             </div>
           </div>
-          <ExternalLink className="text-muted-foreground h-4 w-4 opacity-0 group-hover:opacity-60 transition-opacity shrink-0" />
         </div>
       </CardHeader>
 
@@ -68,21 +67,10 @@ export default function BotCard({ bot }: { bot: BotType }) {
       </CardContent>
 
       <CardFooter className="flex gap-2 pt-4 border-t border-border/30">
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className="flex-1 bg-transparent"
-        >
-          <Link href={`/bots/${bot.bot_id}`}>
-            <Settings className="h-3.5 w-3.5 mr-1.5" />
-            Configure
-          </Link>
-        </Button>
         <Button asChild variant="default" size="sm" className="flex-1">
-          <Link href={`/bots/${bot.bot_id}/#`}>
-            <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-            Open
+          <Link href={`/bots/${bot.bot_id}/configure`}>
+            <Settings className="h-3.5 w-3.5 mr-1.5" />
+            Manage
           </Link>
         </Button>
       </CardFooter>

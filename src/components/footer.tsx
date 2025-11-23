@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import quickbotsIcon from "@/app/assets/quickbots-logo.png";
 
 interface MenuItem {
   title: string;
   links: {
     text: string;
-    url: string;
+    url?: string;
     external?: boolean;
   }[];
 }
@@ -33,32 +33,32 @@ interface FooterProps {
 const Footer = ({
   logo = {
     url: "/",
-    title: "Talka",
-    alt: "Talka AI Bot Platform",
+    title: "QuickBots",
+    alt: "QuickBots AI Bot Platform",
   },
   tagline = "Create intelligent AI bots with ease. No coding required.",
   menuItems = [
     {
       title: "Features",
       links: [
-        { text: "Dashboard", url: "/bots" },
-        { text: "Bot Builder", url: "/#" },
-        { text: "Templates", url: "/#" },
-        { text: "Analytics", url: "/#" },
-        { text: "API", url: "/#" },
+        { text: "AI-assisted onboarding", url: undefined },
+        { text: "Runtime controls & quotas", url: undefined },
+        { text: "Embeddable QuickBots widget", url: undefined },
+        { text: "Analytics & guardrails", url: undefined },
+        { text: "Developer-friendly APIs", url: undefined },
       ],
     },
     {
       title: "Legal",
       links: [
-        { text: "Privacy Policy", url: "/#" },
-        { text: "Terms of Service", url: "/#" },
+        { text: "Privacy Policy", url: "/privacy" },
+        { text: "Terms of Service", url: "/terms" },
       ],
     },
   ],
 }: FooterProps) => {
   return (
-    <footer className="relative border-t border-border/30 bg-background z-50 w-full">
+    <footer className="relative border-t border-border/30 bg-background  w-full">
       <div className="container mx-auto px-4">
         <div className="py-12">
           {/* Main footer content */}
@@ -70,8 +70,15 @@ const Footer = ({
                 className="flex items-center gap-2 mb-4 group"
               >
                 <div className="relative">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors duration-200">
-                    <Sparkles className="h-4 w-4 text-primary" />
+                  <div className="flex h-8 w-8 items-center justify-center overflow-hidden">
+                    <Image
+                      src={quickbotsIcon}
+                      alt="QuickBots logo"
+                      className="h-5 w-5"
+                      width={32}
+                      height={32}
+                      priority
+                    />
                   </div>
                 </div>
                 <span className="text-lg font-semibold text-foreground">
@@ -82,28 +89,24 @@ const Footer = ({
               <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-xs">
                 {tagline}
               </p>
+              <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
+                <p>© 2025 {logo.title}. All rights reserved.</p>
+              </div>
             </div>
 
-            {/* Newsletter signup */}
-            <div className="shrink-0">
-              <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-foreground">
-                  Stay updated
-                </h4>
-                <div className="flex gap-2">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 h-9 text-sm"
-                    autoFocus={false}
-                  />
-                  <Button size="sm" className="shrink-0 text-sm">
-                    Subscribe
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Get the latest updates and features.
-                </p>
+            {/* ASCII art / vibe block */}
+            <div className="hidden md:flex flex-1 items-center justify-center">
+              <div className="rounded-2xl px-4 py-6 sm:px-6 sm:py-8 flex items-center justify-center">
+                <pre className="text-[10px] sm:text-xs md:text-sm lg:text-base leading-tight font-mono text-primary text-center whitespace-pre">
+                  {`   ____        _      _    ____        _                  _____ 
+  / __ \\      (_)    | |  |  _ \\      | |           /\\   |_   _|
+ | |  | |_   _ _  ___| | _| |_) | ___ | |_ ___     /  \\    | |  
+ | |  | | | | | |/ __| |/ /  _ < / _ \\| __/ __|   / /\\ \\   | |  
+ | |__| | |_| | | (__|   <| |_) | (_) | |_\\__ \\  / ____ \\ _| |_ 
+  \\___\\_\\\\__,_|_|\\___|_|\\_\\____/ \\___/ \\__|___/ /_/    \\_\\_____|
+                                                                
+                                                                 `}
+                </pre>
               </div>
             </div>
 
@@ -117,23 +120,32 @@ const Footer = ({
                   <ul className="space-y-2">
                     {section.links.map((link, linkIdx) => (
                       <li key={linkIdx}>
-                        {link.external ? (
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1 group"
-                          >
-                            {link.text}
-                            <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </a>
+                        {link.url ? (
+                          link.external ? (
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1 group"
+                            >
+                              {link.text}
+                              <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </a>
+                          ) : (
+                            <Link
+                              href={link.url}
+                              className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                            >
+                              {link.text}
+                            </Link>
+                          )
                         ) : (
-                          <Link
-                            href={link.url}
-                            className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                          <span
+                            className="relative inline-block text-sm text-muted-foreground after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-primary/60 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:text-foreground hover:after:scale-x-100 focus-visible:outline-none focus-visible:text-foreground"
+                            tabIndex={0}
                           >
                             {link.text}
-                          </Link>
+                          </span>
                         )}
                       </li>
                     ))}
@@ -141,14 +153,6 @@ const Footer = ({
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-border/30" />
-
-          {/* Bottom section */}
-          <div className="pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-            <p>© 2025 {logo.title}. All rights reserved.</p>
           </div>
         </div>
       </div>

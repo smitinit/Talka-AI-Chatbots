@@ -11,17 +11,31 @@ import { cn } from "@/lib/utils";
 export function Modal({
   children,
   classname,
+  open: controlledOpen,
+  onOpenChange,
+  closeOnOverlayClick = true,
 }: {
   children: React.ReactNode;
   classname?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  closeOnOverlayClick?: boolean;
 }) {
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [internalOpen, setInternalOpen] = useState(true);
+
+  // Use controlled or uncontrolled state
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
 
   function handleOpenChange(isOpen: boolean) {
-    setOpen(isOpen);
-    if (!isOpen) {
-      router.back();
+    if (isControlled && onOpenChange) {
+      onOpenChange(isOpen);
+    } else {
+      setInternalOpen(isOpen);
+      if (!isOpen && !isControlled) {
+        router.back();
+      }
     }
   }
 
@@ -29,11 +43,16 @@ export function Modal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
         className={cn("bg-card rounded-xl border-none shadow-none ", classname)}
+        onInteractOutside={(e) => {
+          if (!closeOnOverlayClick) {
+            e.preventDefault();
+          }
+        }}
       >
         <VisuallyHidden>
-          <DialogTitle>Create Bot Modal</DialogTitle>
+          <DialogTitle>Preview Modal</DialogTitle>
           <DialogDescription>
-            This modal is to create a new bot.
+            Preview and customize your chatbot settings.
           </DialogDescription>
         </VisuallyHidden>
 

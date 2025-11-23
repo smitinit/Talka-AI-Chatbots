@@ -1,13 +1,13 @@
 "use client";
 
-import { startTransition, useActionState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { addBot } from "./createActions";
-import { type BotFormInputType, botSchema } from "./createSchema";
+import { useBotActions } from "@/lib/client/bot";
+import { botSchema } from "@/schema";
+import type { BotFormInputType, BotType } from "@/types";
 
 import type { Result } from "@/types/result";
-import type { BotType } from "./createSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 export default function BotForm() {
   const router = useRouter();
+  const { addBot } = useBotActions();
   const {
     register,
     handleSubmit,
@@ -32,26 +33,26 @@ export default function BotForm() {
     shouldFocusError: false,
   });
 
-  const [state, dispatch, isPending] = useActionState<
-    Result<BotType>,
-    BotFormInputType
-  >(
-    async (_prevState, formData) => {
-      const result = await addBot(formData.name, formData.description);
+  const [state, setState] = useState<Result<BotType>>({
+    ok: true,
+    data: { name: "", description: "" },
+  });
+  const [isPending, setIsPending] = useState(false);
 
-      if (result.ok) {
-        reset();
-        router.back();
-      }
+  const onSubmit = handleSubmit(async (formData: BotFormInputType) => {
+    setIsPending(true);
+    const result = await addBot(formData.name, formData.description);
+    setState(result);
 
-      return result;
-    },
-    { ok: true, data: { name: "", description: "" } }
-  );
-
-  const onSubmit = handleSubmit((data) =>
-    startTransition(() => dispatch(data))
-  );
+    if (result.ok && result.data?.bot_id) {
+      const botId = result.data.bot_id;
+      reset();
+      // Use window.location for hard navigation to ensure modal closes
+      window.location.href = `/bots/${botId}/onboarding`;
+      return;
+    }
+    setIsPending(false);
+  });
 
   const isLoading = isSubmitting || isPending;
   return (

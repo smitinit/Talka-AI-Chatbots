@@ -13,25 +13,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 import { useBotConfigs, useBotData } from "@/components/bot-context";
-import { botConfigSchema, type BotConfigType } from "./configSchema";
-import { handleBotConfigUpdate } from "./configActions";
+import { botConfigSchema } from "@/schema";
+import type { BotConfigType } from "@/types";
+import { useConfigActions } from "@/lib/client/config";
 import SaveTriggerUI from "@/components/SaveTriggerUI";
 
 export default function BotConfigForm() {
   const { configs, setConfigs } = useBotConfigs();
+  const { updateBotConfig } = useConfigActions();
 
   // user's saved configs
   const fetchedConfigs = configs as BotConfigType;
@@ -66,9 +59,6 @@ export default function BotConfigForm() {
   // get teh bot for the bot_id property
   const { bot } = useBotData();
 
-  // this is for close/open of custom field
-  const watchExpertise = form.watch("expertise");
-
   // if no bot id throw err
   if (!bot.bot_id) {
     toast.error("Bot not found");
@@ -78,13 +68,18 @@ export default function BotConfigForm() {
 
   // submit function
   function onSubmit(values: BotConfigType) {
-    console.log(values);
+    // console.log(values);
     startTransition(async () => {
       // db call to update the configs
-      const result = await handleBotConfigUpdate(bot.bot_id!, values);
+      const result = await updateBotConfig(bot.bot_id!, values);
 
       if (!result.ok) {
-        toast.error(result.message);
+        const isAuthError =
+          result.message?.toLowerCase().includes("authentication") ||
+          result.message?.toLowerCase().includes("user authentication");
+        toast.error(result.message, {
+          duration: isAuthError ? 8000 : 5000,
+        });
       } else {
         const updated = result.data!;
 
@@ -95,7 +90,7 @@ export default function BotConfigForm() {
       }
     });
   }
-  console.log(form.formState.errors);
+  // console.log(form.formState.errors);
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,82 +105,14 @@ export default function BotConfigForm() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-            {/* Identity & Basic Information */}
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold text-foreground">
-                  Identity & Basic Information
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Define your bot&apos;s core identity and basic
-                  characteristics.
-                </p>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="default_language"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Default Language
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
-                            <SelectValue placeholder="Select default language" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="en">English</SelectItem>
-                            <SelectItem value="hi">Hindi</SelectItem>
-                            <SelectItem value="fr">French</SelectItem>
-                            <SelectItem value="de">German</SelectItem>
-                            <SelectItem value="es">Spanish</SelectItem>
-                            <SelectItem value="zh">Chinese</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="target_audience"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Target Audience
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Describe your bot's target audience (optional)"
-                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
-                          {...field}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
             {/* Personality & Character */}
-            <div className="space-y-6 pt-6 border-t border-border">
+            <div className="space-y-6">
               <div className="space-y-2">
                 <h2 className="text-lg font-semibold text-foreground">
                   Personality & Character
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Shape your bot&apos;s personality, backstory, and core
-                  characteristics.
+                  Shape your bot&apos;s personality and core characteristics.
                 </p>
               </div>
 
@@ -196,7 +123,7 @@ export default function BotConfigForm() {
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Persona
+                        Persona *
                       </FormLabel>
                       <FormControl>
                         <Textarea
@@ -216,7 +143,7 @@ export default function BotConfigForm() {
                   render={({ field }) => (
                     <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-foreground">
-                        Bot Mission & Thesis
+                        Bot Mission & Thesis *
                       </FormLabel>
                       <FormControl>
                         <Textarea
@@ -229,217 +156,6 @@ export default function BotConfigForm() {
                     </FormItem>
                   )}
                 />
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="backstory"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Backstory
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Optional: Bot's background story..."
-                            className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="goals"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Goals
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Optional: Bot's objectives and goals..."
-                            className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="persona_tags"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Persona Tags
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Comma separated tags (optional)"
-                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription className="text-xs text-muted-foreground">
-                        Add tags to describe persona traits (e.g. helpful,
-                        witty, patient)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="do_dont"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Do&apos;s & Don&apos;ts
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="List any specific do's and don'ts for your bot (optional)"
-                            className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="preferred_examples"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Preferred Examples
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Provide example responses or behaviors (optional)"
-                            className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-3">
-                  <FormField
-                    control={form.control}
-                    name="tone_style"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Tone Style
-                        </FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value!}
-                          >
-                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
-                              <SelectValue placeholder="Select tone style" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="formal">Formal</SelectItem>
-                              <SelectItem value="friendly">Friendly</SelectItem>
-                              <SelectItem value="professional">
-                                Professional
-                              </SelectItem>
-                              <SelectItem value="casual">Casual</SelectItem>
-                              <SelectItem value="humorous">Humorous</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="writing_style"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Writing Style
-                        </FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value!}
-                          >
-                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
-                              <SelectValue placeholder="Select writing style" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="concise">Concise</SelectItem>
-                              <SelectItem value="elaborate">
-                                Elaborate
-                              </SelectItem>
-                              <SelectItem value="technical">
-                                Technical
-                              </SelectItem>
-                              <SelectItem value="narrative">
-                                Narrative
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="response_style"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Response Style
-                        </FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value!}
-                          >
-                            <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
-                              <SelectValue placeholder="Select response style" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="direct">Direct</SelectItem>
-                              <SelectItem value="indirect">Indirect</SelectItem>
-                              <SelectItem value="balanced">Balanced</SelectItem>
-                              <SelectItem value="inquisitive">
-                                Inquisitive
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </div>
             </div>
 
@@ -496,144 +212,6 @@ export default function BotConfigForm() {
                     </FormItem>
                   )}
                 />
-
-                <FormField
-                  control={form.control}
-                  name="dos_and_donts"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        General Do&apos;s & Don&apos;ts
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="General guidelines for bot behavior (optional)"
-                          className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                          {...field}
-                          value={field.value || ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="use_emojis"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
-                        <div className="space-y-1">
-                          <FormLabel className="text-sm font-medium text-foreground">
-                            Use Emojis
-                          </FormLabel>
-                          <FormDescription className="text-xs text-muted-foreground">
-                            Allow bot to use emojis in responses
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="include_citations"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center justify-between p-4 rounded-lg border border-border bg-card/50 hover:bg-card/70 transition-colors">
-                        <div className="space-y-1">
-                          <FormLabel className="text-sm font-medium text-foreground">
-                            Include Citations
-                          </FormLabel>
-                          <FormDescription className="text-xs text-muted-foreground">
-                            Add source citations to responses
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Expertise & Knowledge Domain */}
-            <div className="space-y-6 pt-6 border-t border-border">
-              <div className="space-y-2">
-                <h2 className="text-lg font-semibold text-foreground">
-                  Expertise & Knowledge Domain
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Define your bot&apos;s area of expertise and knowledge focus.
-                </p>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="expertise"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Expertise Area
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value!}
-                        >
-                          <SelectTrigger className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary">
-                            <SelectValue placeholder="Select expertise" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="finance">Finance</SelectItem>
-                            <SelectItem value="health">Health</SelectItem>
-                            <SelectItem value="technology">
-                              Technology
-                            </SelectItem>
-                            <SelectItem value="education">Education</SelectItem>
-                            <SelectItem value="custom">Custom</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {watchExpertise === "custom" && (
-                  <FormField
-                    control={form.control}
-                    name="customexpertise"
-                    render={({ field }) => (
-                      <FormItem className="space-y-2">
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Custom Expertise
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Describe your custom expertise area"
-                            className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
-                            {...field}
-                            value={field.value ?? ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
               </div>
             </div>
 

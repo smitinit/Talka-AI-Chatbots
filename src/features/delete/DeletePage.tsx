@@ -9,14 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteBot } from "./deleteAction";
-import { AlertTriangle, Power, PowerOff, Trash2 } from "lucide-react";
+import { useBotActions } from "@/lib/client/bot";
+import { AlertTriangle, Power, PowerOff, Trash2, Trash } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ConfirmActionDialog } from "../../components/ConfirmDialog";
 
 export default function DangerSectionPage() {
   const [isPendingDelete, startDeleteTransition] = useTransition();
+  const [isPendingDeleteAll, startDeleteAllTransition] = useTransition();
+  const { deleteBot, deleteAllBots } = useBotActions();
   // get the bot for the bot_id property
   const { bot } = useBotData();
 
@@ -26,16 +28,58 @@ export default function DangerSectionPage() {
   }
   function handleDeleteBot() {
     startDeleteTransition(async () => {
-      // db call to update the settings
-      await deleteBot(bot.bot_id!);
+      // db call to delete the bot
+      const result = await deleteBot(bot.bot_id!);
 
-      toast.error(`Bot ${bot.name} is deleted`);
+      if (result.ok) {
+        toast.success(`Bot ${bot.name} is deleted`);
+        // Trigger refetch on bots list page
+        if (typeof window !== "undefined") {
+          const refetch = (window as Window & { refetchBots?: () => void }).refetchBots;
+          if (refetch) {
+            refetch();
+          }
+        }
+        window.location.href = "/bots";
+      } else {
+        const message = result.message || "Failed to delete bot";
+        const isAuthError = message.toLowerCase().includes("authentication") || 
+                           message.toLowerCase().includes("user authentication");
+        toast.error(message, {
+          duration: isAuthError ? 8000 : 5000,
+        });
+      }
     });
   }
 
   const [isOnline, setOnline] = useState(false);
   function handleStatusChange() {
     setOnline(!isOnline);
+  }
+
+  function handleDeleteAllBots() {
+    startDeleteAllTransition(async () => {
+      const result = await deleteAllBots();
+
+      if (result.ok) {
+        toast.success("All bots have been deleted");
+        // Trigger refetch on bots list page
+        if (typeof window !== "undefined") {
+          const refetch = (window as Window & { refetchBots?: () => void }).refetchBots;
+          if (refetch) {
+            refetch();
+          }
+        }
+        window.location.href = "/bots";
+      } else {
+        const message = result.message || "Failed to delete all bots";
+        const isAuthError = message.toLowerCase().includes("authentication") || 
+                           message.toLowerCase().includes("user authentication");
+        toast.error(message, {
+          duration: isAuthError ? 8000 : 5000,
+        });
+      }
+    });
   }
   return (
     <div className="mx-auto max-w-4xl px-6 py-8">
@@ -105,6 +149,28 @@ export default function DangerSectionPage() {
               variant="destructive"
               onConfirm={handleDeleteBot}
               disabled={isPendingDelete}
+              isDestructive={true}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 border border-destructive/40 rounded-lg bg-destructive/10 hover:bg-destructive/15 transition-colors duration-200">
+            <div className="flex-1">
+              <h4 className="font-medium text-destructive text-sm">
+                Delete All Bots
+              </h4>
+              <p className="text-xs text-muted-foreground mt-1">
+                Permanently delete all your bots and all associated data. This action cannot be undone.
+              </p>
+            </div>
+            <ConfirmActionDialog
+              title="Are you absolutely sure you want to delete ALL bots?"
+              description="This will permanently delete ALL of your bots and all their associated data. This action is completely irreversible and cannot be undone. Please confirm you understand the consequences."
+              triggerLabel="Delete All Bots"
+              icon={<Trash className="h-4 w-4" />}
+              actionLabel="Yes, Delete All"
+              variant="destructive"
+              onConfirm={handleDeleteAllBots}
+              disabled={isPendingDeleteAll || isPendingDelete}
               isDestructive={true}
             />
           </div>

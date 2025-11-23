@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/footer";
 import Script from "next/script";
+import { SupabaseProvider } from "@/providers/SupabaseProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,27 +20,27 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Talka · AI Chatbots",
-    template: "%s · Talka",
+    default: "QuickBots · AI Chatbots",
+    template: "%s · QuickBots",
   },
   description:
-    "Talka is a personalized multi-tenant powerhouse for AI-driven chatbots.",
+    "QuickBots is a personalized multi-tenant powerhouse for AI-driven chatbots.",
   icons: { icon: "/favicon.ico" },
   // themeColor: "#ffffff",
   // viewport: "width=device-width, initial-scale=1",
   openGraph: {
-    title: "Talka · AI Chatbots",
+    title: "QuickBots · AI Chatbots",
     description:
       "Create, configure and manage AI-powered chatbots in one place.",
-    // url: "https://talka.ai",
-    siteName: "Talka",
-    // images: [{ url: "/og.png", width: 1200, height: 630, alt: "Talka" }],
+    // url: "https://quickbots.ai",
+    siteName: "QuickBots",
+    // images: [{ url: "/og.png", width: 1200, height: 630, alt: "QuickBots" }],
     type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Talka · AI Chatbots",
+    title: "QuickBots · AI Chatbots",
     description:
       "Create, configure and manage AI-powered chatbots in one place.",
     // images: ["/og.png"],
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   robots: { follow: true, index: true },
 };
 
-import Chatbot from "@/packages/chatbot-ui/src/Chatbot";
+import { PreviewModalProvider } from "@/contexts/preview-modal-context";
 export default function RootLayout({
   children,
 }: {
@@ -69,21 +70,24 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/getvoip-grotesque"
           rel="stylesheet"
         />
-        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="antialiased">
         <ClerkProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Navbar />
-            <Chatbot
-              botId="8bc77785-43dc-4607-b69f-431c7950b235"
-              position="bottom-right"
-              theme="blue"
-            />
-            {children}
+          <SupabaseProvider>
+            <PreviewModalProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+              >
+                <Navbar />
+                {/* <ConditionalChatbot botId="920d50c0-795a-4f84-97cc-326672dcce38" /> */}
+                {children}
 
-            <Footer />
-          </ThemeProvider>
+                <Footer />
+              </ThemeProvider>
+            </PreviewModalProvider>
+          </SupabaseProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -1,11 +1,6 @@
 import { kv } from "@vercel/kv";
-import lru, { BotProfile } from "./lru";
-
-type ApiKeyCache = {
-  api_id: string;
-  permissions: string[];
-  name: string;
-};
+import lru from "./lru";
+import type { ApiKeyCache, BotProfile } from "@/types/cache.types";
 
 export async function getCachedApiKey(
   hash: string

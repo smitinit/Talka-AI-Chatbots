@@ -3,8 +3,9 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { apiKeySchema, ApiKeyFormType, ApiKeyRow } from "./apiSchema";
-import { createApiKey } from "./apiActions";
+import { apiKeySchema } from "@/schema";
+import type { ApiKeyFormType, ApiKeyRow } from "@/types";
+import { useApiKeyActions } from "@/lib/client/api";
 import { toast } from "sonner";
 import { useBotApi, useBotData } from "@/components/bot-context";
 
@@ -53,6 +54,7 @@ export default function CreateApiKeyDialog() {
   const [lastToken, setLastToken] = useState<string | null>(null);
 
   const { api: apiKeys, setApi } = useBotApi();
+  const { createApiKey } = useApiKeyActions();
 
   const form = useForm<ApiKeyFormType>({
     resolver: zodResolver(apiKeySchema),
@@ -74,13 +76,19 @@ export default function CreateApiKeyDialog() {
       );
 
       if (!result.ok) {
-        toast.error(result.message);
+        const isAuthError =
+          result.message?.toLowerCase().includes("authentication") ||
+          result.message?.toLowerCase().includes("user authentication");
+        toast.error(result.message, {
+          duration: isAuthError ? 8000 : 5000,
+        });
         return;
       }
 
-      const token = result.data!.token_hash;
-      if (token && result.data) {
-        setLastToken(token); // show it once
+      // Extract raw_token from response (shown once, never stored)
+      const rawToken = result.data?.raw_token;
+      if (rawToken && result.data) {
+        setLastToken(rawToken); // show it once
 
         setShowToken(true);
         const newKey: ApiKeyRow = {

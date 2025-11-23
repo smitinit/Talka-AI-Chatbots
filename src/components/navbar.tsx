@@ -11,9 +11,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-import { Menu, X, Bot, Home, Settings, FileText } from "lucide-react";
-import Logo from "../app/assets/ChatGPT Image Nov 6, 2025, 02_51_42 PM.png";
+import {
+  Menu,
+  X,
+  Bot,
+  Home,
+  Settings,
+  FileText,
+  ArrowBigRightDashIcon,
+  BookOpenIcon,
+} from "lucide-react";
 import Image from "next/image";
+import quickbotsIcon from "@/app/assets/quickbots-logo.png";
 const navigationItems = [
   {
     title: "Dashboard",
@@ -49,14 +58,17 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 z-10 group">
-            <Image
-              src={Logo.src}
-              alt="Quick Bots Logo"
-              className="object-contain"
-              width={48}
-              height={48}
-            />
+          <Link href="/" className="flex items-center space-x-2 z-10 group ">
+            <div className="h-10 w-10 flex items-center justify-center overflow-hidden ">
+              <Image
+                src={quickbotsIcon}
+                alt="QuickBots logo"
+                className="object-contain"
+                width={36}
+                height={36}
+                priority
+              />
+            </div>
             <h1 className="font-getvoip text-lg font-bold text-foreground tracking-wide">
               QUICK BOTS
             </h1>
@@ -64,19 +76,21 @@ export default function Navbar() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className="hidden sm:flex text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Link href="/bots">Your all Bots</Link>
+            <Button asChild variant="default" size="sm">
+              <Link href="/docs" className="flex items-center gap-2">
+                View docs <BookOpenIcon className="w-4 h-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="default" size="sm">
+              <Link href="/bots" className="flex items-center gap-2">
+                Your bots <ArrowBigRightDashIcon className="w-4 h-4" />
+              </Link>
             </Button>
             <ThemeToggle />
             <SignedOut>
               <div className="hidden sm:flex items-center gap-2">
                 <SignInButton mode="redirect">
-                  <Button variant="ghost" size="sm" className="text-sm">
+                  <Button variant="ghost" size="sm" className="text-sm ">
                     Sign In
                   </Button>
                 </SignInButton>
@@ -96,7 +110,6 @@ export default function Navbar() {
                 appearance={{
                   elements: {
                     avatarBox: "h-8 w-8",
-                    userButtonPopoverCard: "shadow-lg border",
                   },
                 }}
               />
@@ -106,7 +119,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className="md:hidden "
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
@@ -128,7 +141,7 @@ export default function Navbar() {
                   <Link
                     key={item.title}
                     href={item.href}
-                    className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200"
+                    className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200 "
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="h-4 w-4 text-muted-foreground" />
@@ -140,7 +153,7 @@ export default function Navbar() {
               <div className="border-t border-border/30 pt-3 mt-3">
                 <Link
                   href="/pricing"
-                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200"
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200 "
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span>Pricing</span>
@@ -152,13 +165,13 @@ export default function Navbar() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="w-full text-sm bg-transparent"
+                        className="w-full text-sm bg-transparent "
                       >
                         Sign In
                       </Button>
                     </SignInButton>
                     <SignUpButton mode="redirect">
-                      <Button size="sm" className="w-full text-sm">
+                      <Button size="sm" className="w-full text-sm ">
                         Get Started
                       </Button>
                     </SignUpButton>
@@ -168,7 +181,7 @@ export default function Navbar() {
                 <SignedIn>
                   <Link
                     href="/bots"
-                    className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200"
+                    className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-accent/50 transition-colors duration-200 "
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <span>Dashboard</span>

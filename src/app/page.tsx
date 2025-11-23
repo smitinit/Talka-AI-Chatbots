@@ -1,15 +1,20 @@
 "use client";
 import { useState, useCallback, memo, type ReactNode } from "react";
+
+// This is a static marketing page - no dynamic data needed
+export const dynamic = "force-static";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
 import {
   ArrowRight,
   Bot,
-  Sparkles,
   CheckCircle,
+  Sparkles,
   TrendingUp,
-  Globe,
 } from "lucide-react";
+import { motion } from "framer-motion";
+import SplitText from "@/components/SplitText";
+import quickbotsIcon from "./assets/quickbots-logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,11 +25,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import dashboardimage from "./assets/dashboard.png";
-import dashboardimagewhite from "./assets/dashboard-white.png";
-import feature1 from "./assets/personality image.png";
-import feature2 from "./assets/multiplatform-integration.jpeg";
-import feature3 from "./assets/advance-analysis.jpeg";
+import dashboardimage from "./assets/hero-dashboard-dark.png";
+import dashboardimagewhite from "./assets/hero-dashboard-light.png";
+import feature1 from "./assets/feature-personality.png";
+import feature2 from "./assets/feature-multiplatform-integration.jpeg";
+import feature3 from "./assets/feature-advanced-analytics.jpeg";
 import { useTheme } from "next-themes";
 
 interface PowerFeature {
@@ -44,25 +49,34 @@ interface FeatureItem {
 const powerFeatures: PowerFeature[] = [
   {
     id: "feature-1",
-    title: "AI Personality Customization",
+    title: "Guided Bot Creation",
     description:
-      "Create unique AI personalities with custom traits, knowledge bases, and conversation styles tailored to your brand.",
+      "Capture brand voice, product knowledge, and guardrails in minutes using QuickBots’ onboarding flow and AI-assisted config generator.",
     image: feature1,
-    icon: <Bot className="h-5 w-5" />,
+    icon: (
+      <Image
+        src={quickbotsIcon}
+        alt="QuickBots icon"
+        className="h-8 w-8"
+        width={32}
+        height={32}
+        priority
+      />
+    ),
   },
   {
     id: "feature-2",
-    title: "Multi-Platform Integration",
+    title: "Embeddable QuickBots Widget",
     description:
-      "Deploy your AI bot across websites, mobile apps, and messaging platforms with seamless integration.",
+      "Drop-in React component (`@qb/quickbot`) for instant website chat, complete with session history, file uploads, and theming that matches your product.",
     image: feature2,
-    icon: <Globe className="h-5 w-5" />,
+    icon: <Bot className="h-5 w-5" />,
   },
   {
     id: "feature-3",
-    title: "Advanced Analytics",
+    title: "Ops & Analytics Control Room",
     description:
-      "Track conversations, user satisfaction, and bot performance with comprehensive analytics dashboard.",
+      "Monitor rate limits, quotas, and live conversations from the dashboard. Ship updates safely with runtime toggles, alerts, and audit trails.",
     image: feature3,
     icon: <TrendingUp className="h-5 w-5" />,
   },
@@ -71,33 +85,33 @@ const powerFeatures: PowerFeature[] = [
 const featureItems: FeatureItem[] = [
   {
     id: 1,
-    title: "Intelligent Conversation Flow",
+    title: "AI-Assisted Onboarding",
     description:
-      "Our AI bots understand context and maintain natural conversation flow. They can handle complex queries, remember previous interactions, and provide personalized responses that feel genuinely human.",
+      "Feed QuickBots a few prompts about your product and it auto-generates persona, thesis, greetings, runtime defaults, and UI settings that can be edited before publishing.",
   },
   {
     id: 2,
-    title: "Custom Knowledge Training",
+    title: "Bring Your Own Stack",
     description:
-      "Train your bot on your specific data, documents, and knowledge base. Upload PDFs, websites, or text files to create a specialized AI assistant that knows your business inside and out.",
+      "Use Supabase Auth + Postgres, plug in your preferred LLM provider, and access everything via RESTful APIs so QuickBots layers onto existing infrastructure instead of replacing it.",
   },
   {
     id: 3,
-    title: "Multi-Channel Deployment",
+    title: "QuickBots Runtime Controls",
     description:
-      "Deploy your AI bot across multiple platforms simultaneously. Whether it's your website, mobile app, WhatsApp, Telegram, or custom API integration, manage everything from one dashboard.",
+      "Ship safe updates with rate limits, token quotas, and environment-specific configs. Pause traffic instantly or switch models without redeploying your site.",
   },
   {
     id: 4,
-    title: "Real-Time Analytics & Insights",
+    title: "Embeddable Experience Kit",
     description:
-      "Monitor your bot's performance with detailed analytics. Track user satisfaction, conversation success rates, popular queries, and identify areas for improvement with actionable insights.",
+      "Install the QuickBots widget package or export raw config to drop into mobile apps, Next.js sites, or custom React shells with full theming support.",
   },
   {
     id: 5,
-    title: "Advanced Customization Options",
+    title: "Human-Ready Analytics",
     description:
-      "Customize every aspect of your bot's personality, appearance, and behavior. Set custom greetings, fallback responses, conversation tone, and integrate with your existing tools and workflows.",
+      "Surface live conversation transcripts, user sentiment, and funnel drop-off points. Grant stakeholders read-only access while engineers keep edit control.",
   },
 ];
 
@@ -105,6 +119,7 @@ const featureItems: FeatureItem[] = [
 
 const Hero = memo(function Hero() {
   const { theme } = useTheme();
+  const handleSplitComplete = useCallback(() => {}, []);
   return (
     <section className="relative overflow-hidden py-10 sm:py-12 md:py-16 lg:py-20 xl:py-28">
       <div className="absolute inset-0 -z-10">
@@ -125,44 +140,85 @@ const Hero = memo(function Hero() {
               </div>
             </div>
 
-            <div className="relative mx-auto flex size-14 sm:size-16 md:size-18 lg:size-20 xl:size-24 items-center justify-center rounded-full border border-border/40 bg-card/80 backdrop-blur-md shadow-xl">
-              <Sparkles className="z-10 size-5 sm:size-6 md:size-7 lg:size-8 xl:size-10 text-primary" />
-              <div className="absolute inset-0 rounded-full bg-[conic-gradient(at_center,hsl(var(--primary))_0deg,hsl(var(--accent))_90deg,hsl(var(--primary))_180deg,hsl(var(--accent))_270deg)] opacity-20 blur-[60px]" />
-            </div>
+            <motion.div
+              className="mx-auto flex h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 items-center justify-center "
+              animate={{ rotate: [0, 360, 350, 360, 355, 360] }}
+              transition={{
+                repeat: Infinity,
+                duration: 3,
+                ease: "easeInOut",
+                repeatDelay: 0.4,
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.05, 0.98, 1.02, 1] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3,
+                  ease: "easeInOut",
+                }}
+                className="inline-flex h-full w-full items-center justify-center rounded-full"
+              >
+                <Image
+                  src={quickbotsIcon}
+                  alt="QuickBots"
+                  className="h-full w-full object-contain drop-shadow-lg"
+                  width={112}
+                  height={112}
+                  priority
+                />
+              </motion.div>
+            </motion.div>
 
             <div className="text-center space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 xl:space-y-8">
-              <Badge
-                variant="secondary"
-                className="mx-auto px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg font-medium"
-              >
-                <Sparkles className="mr-1.5 sm:mr-2 h-3 sm:h-3.5 md:h-4 lg:h-4 xl:h-5 w-3 sm:w-3.5 md:w-4 lg:w-4 xl:w-5" />
-                AI-Powered Conversations
-              </Badge>
-
-              <h1 className="mx-auto max-w-6xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight tracking-tight">
-                Build Intelligent{" "}
-                <span className="bg-linear-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-                  AI Bots
-                </span>{" "}
-                in Minutes
-              </h1>
+              <div className="mx-auto max-w-5xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight text-primary ">
+                <SplitText
+                  text="Launch customer-ready AI chatbots faster with QuickBots"
+                  className="inline-block text-inherit"
+                  delay={120}
+                  duration={0.2}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 32 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.2}
+                  rootMargin="-50px"
+                  textAlign="center"
+                  onLetterAnimationComplete={handleSplitComplete}
+                />
+              </div>
+              <p className="mx-auto max-w-3xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-muted-foreground leading-relaxed">
+                Onboard teams with AI-assist, manage runtime limits, and embed
+                QuickBots widgets without rebuilding your stack.
+              </p>
 
               <p className="mx-auto max-w-4xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-muted-foreground leading-relaxed">
-                Create, customize, and deploy powerful AI assistants that
-                understand your business. No coding required—just intelligent
-                conversations that convert.
+                Guided onboarding, a managed runtime, and an embeddable widget
+                so product, support, and growth teams can ship AI experiences
+                without rebuilding infrastructure.
               </p>
             </div>
 
-            <div className="flex justify-center pt-2 sm:pt-3 md:pt-4 lg:pt-5 xl:pt-6">
+            <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2 sm:pt-3 md:pt-4 lg:pt-5 xl:pt-6">
               <Button
                 size="lg"
-                className="px-5 sm:px-6 md:px-7 lg:px-8 xl:px-10 py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
+                className=" px-5 sm:px-6 md:px-7 lg:px-8 xl:px-10 py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
                 asChild
               >
-                <Link href="/bots">
+                <Link href="/bots" className="">
                   Start Building Free
                   <ArrowRight className="ml-2 size-3.5 sm:size-4 md:size-5 lg:size-5 xl:size-6" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className=" px-5 sm:px-6 md:px-7 lg:px-8 xl:px-10 py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-semibold hover:scale-105 transition-transform duration-200"
+                asChild
+              >
+                <Link href="/docs" className="">
+                  View Docs
                 </Link>
               </Button>
             </div>
@@ -176,7 +232,7 @@ const Hero = memo(function Hero() {
             <div className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-2xl xl:rounded-3xl">
               <Image
                 src={theme === "dark" ? dashboardimage : dashboardimagewhite}
-                alt="Talka AI Bot Dashboard Preview"
+                alt="QuickBots AI Bot Dashboard Preview"
                 className="relative z-10 w-full object-cover border-4 border-border/20 shadow-lg sm:shadow-xl md:shadow-2xl lg:shadow-2xl xl:shadow-2xl transition-transform duration-500 group-hover:scale-105"
                 style={{
                   maskImage:
@@ -208,8 +264,8 @@ const PowerfulFeaturesSection = memo(function PowerfulFeaturesSection() {
       </div>
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 relative z-10">
-        <div className="flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-20 xl:gap-24">
-          <div className="flex flex-col items-center text-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8">
+        <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-14 xl:gap-16">
+          <div className="flex flex-col items-center text-center gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6">
             <Badge
               variant="secondary"
               className="px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg"
@@ -235,10 +291,10 @@ const PowerfulFeaturesSection = memo(function PowerfulFeaturesSection() {
 
             <div className="flex flex-col items-center gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 xl:gap-5 pt-2 sm:pt-3 md:pt-4 lg:pt-5 xl:pt-6">
               {[
-                "No-code bot builder with drag & drop interface",
-                "Advanced AI models with custom training",
-                "Real-time analytics and performance insights",
-                "Enterprise-grade security and compliance",
+                "AI-assisted onboarding generates configs & personas automatically",
+                "Live runtime controls for rate limits, quotas, and models",
+                "Embeddable QuickBots widget with session history & file uploads",
+                "Analytics, guardrails, and audit trails for every bot",
               ].map((feature) => (
                 <div
                   key={feature}
@@ -304,7 +360,7 @@ const FeaturesSection = memo(function FeaturesSection() {
   return (
     <section className="py-10 sm:py-12 md:py-16 lg:py-20 xl:py-28 relative overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 relative z-10">
-        <div className="text-center mb-10 sm:mb-12 md:mb-14 lg:mb-16 xl:mb-20">
+        <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12 xl:mb-14">
           <Badge
             variant="secondary"
             className="px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg"
@@ -316,7 +372,7 @@ const FeaturesSection = memo(function FeaturesSection() {
         <div className="mx-auto max-w-4xl px-0 sm:px-2 md:px-4 lg:px-6 xl:px-8">
           <Accordion
             type="single"
-            className="space-y-2.5 sm:space-y-3 md:space-y-3 lg:space-y-4 xl:space-y-5"
+            className="space-y-1.5 sm:space-y-2 md:space-y-2 lg:space-y-3 xl:space-y-3"
             defaultValue="item-1"
           >
             {featureItems.map((tab) => (
@@ -357,17 +413,124 @@ const FeaturesSection = memo(function FeaturesSection() {
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col relative overflow-hidden">
-      {/* Global Background */}
-      <div className="fixed inset-0 -z-20">
-        <div className="absolute inset-0 bg-background" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.05),transparent_50%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,hsl(var(--accent)/0.05),transparent_50%)]" />
-      </div>
+    <>
+      <div className="flex min-h-screen flex-col relative overflow-hidden">
+        {/* Global Background */}
+        <div className="fixed inset-0 -z-20">
+          <div className="absolute inset-0 bg-background" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.05),transparent_50%)]" />
+          <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,hsl(var(--accent)/0.05),transparent_50%)]" />
+        </div>
 
-      <Hero />
-      <PowerfulFeaturesSection />
-      <FeaturesSection />
-    </div>
+        <Hero />
+        <PowerfulFeaturesSection />
+        <FeaturesSection />
+      </div>
+      <style jsx global>{`
+        @keyframes quickbots-orbit {
+          0% {
+            transform: rotate(0deg) scale(1);
+          }
+          35% {
+            transform: rotate(5deg) scale(1.04);
+          }
+          70% {
+            transform: rotate(-4deg) scale(0.97);
+          }
+          100% {
+            transform: rotate(0deg) scale(1);
+          }
+        }
+
+        @keyframes quickbots-icon-pulse {
+          0% {
+            transform: translateY(0) scale(1);
+          }
+          45% {
+            transform: translateY(-6px) scale(1.08);
+          }
+          90% {
+            transform: translateY(4px) scale(0.95);
+          }
+          100% {
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .quickbots-floating-icon {
+          animation: quickbots-icon-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes quickbots-icon-shimmer {
+          0% {
+            transform: rotate(0deg);
+            opacity: 0.1;
+          }
+          50% {
+            opacity: 0.45;
+          }
+          100% {
+            transform: rotate(360deg);
+            opacity: 0.1;
+          }
+        }
+
+        @keyframes quickbots-icon-glow {
+          0% {
+            opacity: 0.2;
+            transform: scale(0.95);
+          }
+          50% {
+            opacity: 0.5;
+            transform: scale(1.05);
+          }
+          100% {
+            opacity: 0.2;
+            transform: scale(0.95);
+          }
+        }
+
+        .quickbots-icon-shell {
+          position: relative;
+          isolation: isolate;
+        }
+
+        .quickbots-icon-shell::before {
+          content: "";
+          position: absolute;
+          inset: -12px;
+          border-radius: 9999px;
+          background: radial-gradient(
+            circle,
+            rgba(99, 102, 241, 0.45),
+            transparent 65%
+          );
+          filter: blur(18px);
+          animation: quickbots-icon-glow 7s ease-in-out infinite;
+          z-index: 0;
+        }
+
+        .quickbots-icon-overlay {
+          border-radius: 9999px;
+          border: 1px solid rgba(99, 102, 241, 0.35);
+          box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.25);
+        }
+
+        .quickbots-icon-overlay::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            rgba(255, 255, 255, 0.35) 120deg,
+            transparent 300deg
+          );
+          mix-blend-mode: screen;
+          animation: quickbots-icon-shimmer 5s linear infinite;
+        }
+      `}</style>
+    </>
   );
 }

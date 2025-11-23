@@ -1,10 +1,13 @@
 "use client";
 
-import { ApiKeyRow } from "@/features/api/apiSchema";
-import type { BotConfigType } from "@/features/config/configSchema";
-import type { BotType } from "@/features/create/createSchema";
-import { BotRuntimeSettingsType } from "@/features/runtime/runtimeSchema";
-import type { BotSettingsType } from "@/features/settings/settingsSchema";
+import {
+  type ApiKeyRow,
+  type BotConfigType,
+  type BotType,
+  type BotRuntimeSettingsType,
+  type BotSettingsType,
+  type FullBotType,
+} from "@/types";
 import {
   createContext,
   Dispatch,
@@ -14,13 +17,11 @@ import {
   useState,
 } from "react";
 
-export interface FullBotType {
-  bot: BotType;
-  botConfigs: BotConfigType;
-  botSettings: BotSettingsType;
-  botRuntimeSettings: BotRuntimeSettingsType;
-  api: ApiKeyRow[];
-}
+type ChatHistoryEntry = {
+  user?: string;
+  bot?: string;
+  timestamp?: string;
+};
 
 type BotContextType = {
   bot: BotType;
@@ -37,6 +38,9 @@ type BotContextType = {
 
   api: ApiKeyRow[];
   setApi: Dispatch<SetStateAction<ApiKeyRow[]>>;
+
+  chatHistory: ChatHistoryEntry[];
+  setChatHistory: Dispatch<SetStateAction<ChatHistoryEntry[]>>;
 };
 const BotContext = createContext<BotContextType | null>(null);
 
@@ -44,7 +48,7 @@ export function BotProvider({
   initials,
   children,
 }: {
-  initials: FullBotType;
+  initials: FullBotType & { chatHistory?: ChatHistoryEntry[] };
   children: React.ReactNode;
 }) {
   const [bot, setBot] = useState(initials.bot);
@@ -53,6 +57,9 @@ export function BotProvider({
   const [api, setApi] = useState<ApiKeyRow[]>(initials.api);
   const [runtimeSettings, setRuntimeSettings] = useState(
     initials.botRuntimeSettings
+  );
+  const [chatHistory, setChatHistory] = useState<ChatHistoryEntry[]>(
+    initials.chatHistory || []
   );
 
   const values = useMemo<BotContextType>(
@@ -67,8 +74,10 @@ export function BotProvider({
       setRuntimeSettings,
       api,
       setApi,
+      chatHistory,
+      setChatHistory,
     }),
-    [bot, configs, settings, api, runtimeSettings]
+    [bot, configs, settings, api, runtimeSettings, chatHistory]
   );
   // console.log(
   //   "DATA ONLY",
@@ -116,4 +125,9 @@ export function useBotRuntimeSettings() {
 export function useBotApi() {
   const { api, setApi } = useBot();
   return { api, setApi };
+}
+
+export function useChatHistory() {
+  const { chatHistory, setChatHistory } = useBot();
+  return { chatHistory, setChatHistory };
 }

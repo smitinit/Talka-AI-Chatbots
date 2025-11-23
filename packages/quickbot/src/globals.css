@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent layout shift when dropdown opens */
+body {
+  scrollbar-gutter: stable;
+}
+

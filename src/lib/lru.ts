@@ -1,25 +1,9 @@
-import { BotConfigType } from "@/features/config/configSchema";
-import { BotRuntimeSettingsType } from "@/features/runtime/runtimeSchema";
-import { BotSettingsType } from "@/features/settings/settingsSchema";
+import type {
+  ApiKeyCache,
+  BotProfile,
+} from "@/types/cache.types";
 import { LRUCache } from "lru-cache";
 
-// ─────────────────────────────
-// TYPES
-// ─────────────────────────────
-export type ApiKeyCache = {
-  api_id: string;
-  permissions: string[];
-  name: string;
-};
-
-export type BotProfile = {
-  config: BotConfigType;
-  runtime_settings: BotRuntimeSettingsType;
-  settings: BotSettingsType;
-  fetchedAt: string;
-};
-
-// Extend if needed
 type CacheValue = ApiKeyCache | BotProfile;
 
 // ─────────────────────────────
@@ -33,7 +17,7 @@ const lru =
   global.__global_lru_cache__ ??
   new LRUCache<string, CacheValue>({
     max: 1000,
-    ttl: 0, // 10 seconds
+    ttl: 0, // no automatic TTL unless you want it
   });
 
 if (!global.__global_lru_cache__) {

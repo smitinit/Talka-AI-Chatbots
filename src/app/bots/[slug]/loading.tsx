@@ -1,5 +1,7 @@
 "use client";
 
+import { Spinner } from "@/components/ui/spinner";
+
 export default function Loading() {
   return (
     <div
@@ -7,8 +9,7 @@ export default function Loading() {
       role="status"
       aria-label="Loading"
     >
-      <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
-      <span className="ml-3 text-sm font-medium">Loading...</span>
+      <Spinner className="size-6" />
     </div>
   );
 }

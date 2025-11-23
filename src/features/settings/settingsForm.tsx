@@ -16,11 +16,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { botSettingsSchema, type BotSettingsType } from "./settingsSchema";
+import { botSettingsSchema } from "@/schema";
+import type { BotSettingsType } from "@/types";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useBotData, useBotSettings } from "@/components/bot-context";
-import { handleBotSettingsUpdate } from "./settingsActions";
+import { useSettingsActions } from "@/lib/client/settings";
 import {
   Select,
   SelectContent,
@@ -32,6 +33,7 @@ import SaveTriggerUI from "@/components/SaveTriggerUI";
 
 export default function BotSettingsForm() {
   const { settings, setSettings } = useBotSettings();
+  const { updateBotSettings } = useSettingsActions();
 
   // user's saved settings
   const fetchedSettings = settings as BotSettingsType;
@@ -76,10 +78,14 @@ export default function BotSettingsForm() {
   function onSubmit(values: BotSettingsType) {
     startUpdateTransition(async () => {
       // db call to update the settings
-      const result = await handleBotSettingsUpdate(bot.bot_id!, values);
+      const result = await updateBotSettings(bot.bot_id!, values);
 
       if (!result.ok) {
-        toast.error(result.message);
+        const isAuthError = result.message?.toLowerCase().includes("authentication") || 
+                           result.message?.toLowerCase().includes("user authentication");
+        toast.error(result.message, {
+          duration: isAuthError ? 8000 : 5000,
+        });
       } else {
         const updated = result.data!;
 
@@ -174,6 +180,7 @@ export default function BotSettingsForm() {
                         placeholder="Describe your business and what it does..."
                         className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormDescription className="text-xs text-muted-foreground">
@@ -214,28 +221,6 @@ export default function BotSettingsForm() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="targeted_audience"
-                  render={({ field }) => (
-                    <FormItem className="space-y-2">
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Targeted Audience
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="e.g., Small businesses, Enterprises"
-                          className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription className="text-xs text-muted-foreground">
-                        Who your product is designed for.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
 
               <FormField
@@ -251,6 +236,7 @@ export default function BotSettingsForm() {
                         placeholder="Describe your product features and benefits..."
                         className="min-h-[100px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormDescription className="text-xs text-muted-foreground">
@@ -262,80 +248,6 @@ export default function BotSettingsForm() {
               />
             </div>
 
-            {/* Strategic Information Section */}
-            <div className="space-y-6 pb-8 border-b border-border">
-              <h3 className="text-lg font-semibold text-foreground">
-                Strategic Information
-              </h3>
-              <FormField
-                control={form.control}
-                name="mission"
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-sm font-medium text-foreground">
-                      Mission
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="What is your mission or purpose?"
-                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs text-muted-foreground">
-                      Your company&apos;s mission statement.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="thesis"
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-sm font-medium text-foreground">
-                      Thesis
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="What is your core business thesis or philosophy?"
-                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs text-muted-foreground">
-                      Your fundamental belief or principle.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="goals"
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-sm font-medium text-foreground">
-                      Goals
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="What are your short and long-term goals?"
-                        className="min-h-[80px] bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs text-muted-foreground">
-                      Your business objectives and targets.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
 
             {/* Contact & Configuration Section */}
             <div className="space-y-6 pb-8 border-b border-border">
@@ -381,6 +293,7 @@ export default function BotSettingsForm() {
                           placeholder="Contact information (phone, address, etc.)"
                           className="h-10 bg-background border-border focus:border-primary focus:ring-1 focus:ring-primary"
                           {...field}
+                          value={field.value ?? ""}
                         />
                       </FormControl>
                       <FormDescription className="text-xs text-muted-foreground">
